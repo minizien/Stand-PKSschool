@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -12,27 +13,27 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            background-color: #f0f2f5;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            color: #fff;
+            color: #333;
         }
         .header-bar {
             padding: 12px 20px;
-            background: rgba(20, 20, 30, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             z-index: 10;
         }
         .header-bar h2 {
             font-size: 18px;
-            color: #00d2ff;
+            color: #1a73e8;
         }
         
         .main-layout {
@@ -42,12 +43,11 @@
             overflow: hidden;
         }
 
-        /* แผงคลังไอเทม/ตัวละครฝั่งซ้าย (สไตล์ Minecraft Inventory เลื่อนลงได้ยาวๆ) */
+        /* แผงคลังตัวละครฝั่งซ้าย สไตล์ Minecraft Inventory โหมดสว่าง เลื่อนลงได้ไม่จำกัด */
         .inventory-sidebar {
-            width: 160px;
-            background: rgba(30, 30, 45, 0.95);
-            backdrop-filter: blur(8px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            width: 150px;
+            background: #ffffff;
+            border-right: 1px solid #e0e0e0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -55,30 +55,30 @@
             gap: 10px;
             z-index: 5;
             flex-shrink: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.02);
         }
         .inventory-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
-            color: #00d2ff;
+            color: #5f6368;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-align: center;
-            margin-bottom: 5px;
         }
         .inventory-grid {
             flex: 1;
             width: 100%;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            gap: 6px;
             overflow-y: auto;
             padding-right: 2px;
             align-content: start;
         }
         .inv-slot {
             aspect-ratio: 1;
-            background: rgba(50, 50, 70, 0.7);
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: #f8f9fa;
+            border: 2px solid #dadce0;
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -88,17 +88,15 @@
             transition: all 0.2s;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
         .inv-slot:hover {
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.15);
-            transform: scale(1.03);
+            border-color: #1a73e8;
+            background: #e8f0fe;
         }
         .inv-slot.selected {
-            border: 3px solid #00d2ff;
-            background: rgba(0, 210, 255, 0.3);
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+            border: 3px solid #1a73e8;
+            background: #e8f0fe;
+            box-shadow: 0 0 8px rgba(26, 115, 232, 0.3);
         }
         .inv-slot img {
             width: 100%;
@@ -109,46 +107,45 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            background: rgba(0,0,0,0.7);
-            font-size: 9px;
+            background: rgba(0, 0, 0, 0.6);
+            font-size: 8px;
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 1px 2px;
+            padding: 1px;
             color: #fff;
         }
         .empty-hint {
             grid-column: span 2;
             font-size: 11px;
-            color: #aaa;
+            color: #70757a;
             text-align: center;
-            padding: 20px 5px;
+            padding: 15px 5px;
         }
 
-        /* ปุ่มพิกัดจัดการข้อมูล */
         .btn-db-action {
             width: 100%;
             padding: 8px;
             font-size: 11px;
             font-weight: bold;
-            background: rgba(255, 152, 0, 0.2);
-            border: 1px solid rgba(255, 152, 0, 0.4);
-            color: #ffb74d;
+            background: #e8f0fe;
+            border: 1px solid #1a73e8;
+            color: #1a73e8;
             border-radius: 6px;
             cursor: pointer;
             transition: 0.2s;
         }
         .btn-db-action:hover {
-            background: rgba(255, 152, 0, 0.4);
+            background: #d2e3fc;
         }
 
-        /* พื้นที่เวิร์กสเปซตารางสแตน */
+        /* พื้นที่เวิร์กสเปซตารางสแตน โหมดสว่าง */
         .workspace {
             flex: 1;
             position: relative;
             overflow: hidden;
-            background-color: #12121c;
+            background-color: #eef2f5;
             cursor: grab;
             touch-action: none;
         }
@@ -165,32 +162,32 @@
         #stand-grid-container {
             display: grid;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.03);
+            background: #ffffff;
             padding: 25px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            border: 1px solid #dadce0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         .stand-slot {
             width: 65px;
             height: 85px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px dashed rgba(255, 255, 255, 0.2);
+            background: #f8f9fa;
+            border: 2px dashed #bdc1c6;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             border-radius: 8px;
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            color: #70757a;
             cursor: pointer;
             position: relative;
             transition: all 0.15s;
         }
         .stand-slot:hover {
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-            color: #00d2ff;
+            border-color: #1a73e8;
+            background: #e8f0fe;
+            color: #1a73e8;
         }
         .stand-slot img {
             width: 100%;
@@ -199,19 +196,18 @@
             border-radius: 6px;
         }
 
-        /* ปุ่มซูมลอยมุมขวาล่าง */
+        /* ปุ่มควบคุมซูมลอยมุมขวาล่าง โหมดสว่าง */
         .zoom-controls {
             position: fixed;
             bottom: 20px;
             right: 20px;
             display: flex;
             gap: 8px;
-            background: rgba(30, 30, 45, 0.85);
-            backdrop-filter: blur(8px);
+            background: #ffffff;
             padding: 8px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border: 1px solid #dadce0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             z-index: 100;
         }
         .btn {
@@ -223,12 +219,12 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn.primary { background: linear-gradient(135deg, #007bff, #00d2ff); color: white; }
-        .btn.primary:hover { opacity: 0.9; }
-        .btn.secondary { background: rgba(255,255,255,0.1); color: white; }
-        .btn.secondary:hover { background: rgba(255,255,255,0.2); }
-        .btn.danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; }
-        .btn.danger:hover { opacity: 0.9; }
+        .btn.primary { background-color: #1a73e8; color: white; }
+        .btn.primary:hover { background-color: #1557b0; }
+        .btn.secondary { background-color: #f1f3f4; color: #3c4043; border: 1px solid #dadce0; }
+        .btn.secondary:hover { background-color: #e8eaed; }
+        .btn.danger { background-color: #d93025; color: white; }
+        .btn.danger:hover { background-color: #b31412; }
     </style>
 </head>
 <body>
@@ -239,11 +235,11 @@
     </div>
 
     <div class="main-layout">
-        <!-- แผงคลังตัวละครฝั่งซ้าย (เลื่อนดูได้ยาวๆ เป็นร้อยเป็นพันรูป) -->
+        <!-- แผงคลังตัวละครฝั่งซ้าย เลื่อนดูได้ยาวๆ ไม่จำกัด -->
         <div class="inventory-sidebar">
             <div class="inventory-title">📦 คลังตัวละคร</div>
             <div class="inventory-grid" id="inventory-grid">
-                <div class="empty-hint">กำลังโหลดข้อมูลจาก DB...</div>
+                <div class="empty-hint">กำลังโหลด...</div>
             </div>
             <button class="btn-db-action" onclick="window.location.href='index.html'">➕ เพิ่มรูปใน Lobby</button>
         </div>
@@ -283,7 +279,7 @@
 
         let scale = 1, panX = 0, panY = 0;
         let isDragging = false, startX = 0, startY = 0;
-        let selectedCharacterImage = null; // เก็บรูปที่เลือกจากคลังซ้าย
+        let selectedCharacterImage = null; // เก็บรูปที่จิ้มเลือกจากคลังซ้าย
 
         window.addEventListener('DOMContentLoaded', () => {
             let input = prompt("กรุณากรอกจำนวนน้องในสแตนในรูปแบบ แถว×คอลัมน์ (เช่น 9×8):", "9×8");
@@ -311,7 +307,7 @@
                 slot.dataset.id = i;
                 slot.innerText = i;
                 
-                // เมื่อคลิกช่องสแตนให้นำรูปที่เลือกจากคลังฝั่งซ้ายมาวาง
+                // เมื่อคลิกช่องสแตน ให้นำรูปที่เลือกจากคลังฝั่งซ้ายมาวางทันที
                 slot.onclick = (e) => {
                     e.stopPropagation();
                     if (selectedCharacterImage) {
@@ -331,7 +327,7 @@
             }, 50);
         }
 
-        // โหลดข้อมูลตัวละครทั้งหมดจาก Firebase มารวมไว้ที่แผงซ้าย
+        // โหลดข้อมูลตัวละครทั้งหมดจาก Firebase มาใส่คลังฝั่งซ้าย
         async function loadInventoryFromFirebase() {
             const container = document.getElementById('inventory-grid');
             try {
@@ -356,7 +352,7 @@
                         <span>${data.name}</span>
                     `;
                     
-                    // เมื่อคลิกเลือกตัวละครจากคลังซ้าย
+                    // เมื่อจิ้มเลือกตัวละครจากคลังซ้าย
                     slot.onclick = () => {
                         document.querySelectorAll('.inv-slot').forEach(s => s.classList.remove('selected'));
                         slot.classList.add('selected');
@@ -367,7 +363,7 @@
                 });
             } catch (error) {
                 console.error("Error loading inventory: ", error);
-                container.innerHTML = '<div class="empty-hint" style="color:#ff416c;">โหลดข้อมูลพลาด</div>';
+                container.innerHTML = '<div class="empty-hint" style="color:#d93025;">โหลดข้อมูลพลาด</div>';
             }
         }
 
