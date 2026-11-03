@@ -3,14 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าสร้างสแตน - เว็บสแตน</title>
+    <title>ระบบสร้างสแตน - เว็บสแตน</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* สไตล์เพิ่มเติมเฉพาะหน้าสร้างสแตน */
+        body {
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #eef2f3;
+        }
+        .header-bar {
+            padding: 10px 20px;
+            background: white;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        .workspace {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            position: relative;
+            padding: 20px;
+        }
+        /* ส่วนของตารางสแตนที่ซูมได้ */
+        #stand-grid-container {
+            transform-origin: center center;
+            transition: transform 0.1s ease-out;
+            display: grid;
+            gap: 5px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .stand-slot {
+            width: 60px;
+            height: 80px;
+            border: 2px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fafafa;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #888;
+            cursor: pointer;
+            position: relative;
+        }
+        .stand-slot:hover {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+        .zoom-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body>
-    <div class="lobby-container">
-        <h1>หน้าสร้างสแตน</h1>
-        <p>ส่วนสำหรับจัดการและสร้างสแตนของคุณ</p>
-        <button class="btn primary" onclick="window.location.href='index.html'">กลับสู่หน้า Lobby</button>
+
+    <div class="header-bar">
+        <h2>ออกแบบสแตนของคุณ</h2>
+        <button class="btn primary" style="padding: 6px 12px; font-size: 14px;" onclick="window.location.href='index.html'">กลับหน้า Lobby</button>
     </div>
+
+    <div class="workspace" id="workspace">
+        <div id="stand-grid-container"></div>
+    </div>
+
+    <!-- ปุ่มควบคุมการซูมเข้า-ซูมออก -->
+    <div class="zoom-controls">
+        <button class="btn secondary" onclick="zoomIn()">➕ ซูมเข้า</button>
+        <button class="btn secondary" onclick="zoomOut()">➖ ซูมออก</button>
+        <button class="btn danger" onclick="resetZoom()">🔄รีเซ็ต</button>
+    </div>
+
+    <script>
+        let scale = 1;
+
+        // เมื่อเข้าหน้าเว็บ จะเด้งหน้าต่างถามขนาดสแตน (เช่น 9x8)
+        window.addEventListener('DOMContentLoaded', () => {
+            let input = prompt("กรุณากรอกจำนวนน้องในสแตนในรูปแบบ แถว×คอลัมน์ (เช่น 9×8):", "9×8");
+            if (input) {
+                // รองรับทั้งเครื่องหมาย x ภาษาอังกฤษและไทย
+                let parts = input.toLowerCase().replace('×', 'x').split('x');
+                let rows = parseInt(parts[0]) || 9;
+                let cols = parseInt(parts[1]) || 8;
+                generateGrid(rows, cols);
+            } else {
+                generateGrid(9, 8); // ค่าเริ่มต้นถ้ากดcancel
+            }
+        });
+
+        function generateGrid(rows, cols) {
+            const container = document.getElementById('stand-grid-container');
+            container.style.gridTemplateColumns = `repeat(${cols}, 60px)`;
+            container.style.gridTemplateRows = `repeat(${rows}, 80px)`;
+            container.innerHTML = '';
+
+            for (let i = 1; i <= rows * cols; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'stand-slot';
+                slot.innerText = i;
+                slot.onclick = () => {
+                    alert(`เลือกช่องสแตนที่ ${i} (สามารถใส่รูปลงในช่องนี้ได้ในระบบถัดไป)`);
+                };
+                container.appendChild(slot);
+            }
+        }
+
+        // ฟังก์ชันซูมเข้า-ออก
+        function zoomIn() {
+            scale += 0.1;
+            updateZoom();
+        }
+        function zoomOut() {
+            scale = Math.max(0.3, scale - 0.1);
+            updateZoom();
+        }
+        function resetZoom() {
+            scale = 1;
+            updateZoom();
+        }
+        function updateZoom() {
+            document.getElementById('stand-grid-container').style.transform = `scale(${scale})`;
+        }
+    </script>
 </body>
 </html>
