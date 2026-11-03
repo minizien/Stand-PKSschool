@@ -12,69 +12,87 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eef2f3;
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            color: #fff;
         }
         .header-bar {
-            padding: 10px 20px;
-            background: white;
+            padding: 12px 20px;
+            background: rgba(20, 20, 30, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             z-index: 10;
         }
+        .header-bar h2 {
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            color: #00d2ff;
+        }
+        
         .main-layout {
             display: flex;
             flex: 1;
             position: relative;
             overflow: hidden;
         }
-        /* แถบ UI ฝั่งซ้าย (4 ช่องท่า + 1 ช่องตั้งค่า) */
+
+        /* แถบ UI ฝั่งซ้าย สไตล์ช่องไอเทมเกม */
         .sidebar-ui {
-            width: 80px;
-            background: #ffffff;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            width: 90px;
+            background: rgba(30, 30, 45, 0.9);
+            backdrop-filter: blur(8px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 15px 10px;
-            gap: 10px;
+            gap: 12px;
             z-index: 5;
             overflow-y: auto;
             flex-shrink: 0;
         }
+        .sidebar-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a0a0c0;
+            margin-bottom: -4px;
+        }
         .pose-slot {
-            width: 55px;
-            height: 55px;
-            border: 2px dashed #ccc;
-            border-radius: 8px;
+            width: 60px;
+            height: 60px;
+            background: rgba(50, 50, 70, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #fafafa;
             cursor: pointer;
-            font-size: 11px;
-            text-align: center;
-            color: #666;
-            transition: all 0.2s;
+            font-size: 12px;
+            color: #ccc;
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
-            flex-shrink: 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
         .pose-slot:hover {
-            border-color: #007bff;
-            background: #f0f8ff;
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.1);
+            transform: translateY(-2px);
         }
         .pose-slot.active {
-            border: 3px solid #007bff;
-            background: #e6f0ff;
-            color: #007bff;
+            border: 3px solid #00d2ff;
+            background: rgba(0, 210, 255, 0.2);
+            color: #00d2ff;
             font-weight: bold;
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
         }
         .pose-slot img {
             width: 100%;
@@ -82,20 +100,23 @@
             object-fit: cover;
         }
         .settings-slot {
-            border-style: solid;
-            border-color: #6c757d;
-            background: #e9ecef;
-            color: #333;
+            background: rgba(255, 152, 0, 0.2);
+            border-color: rgba(255, 152, 0, 0.4);
+            color: #ffb74d;
+            font-size: 11px;
             font-weight: bold;
-            font-size: 10px;
+        }
+        .settings-slot:hover {
+            border-color: #ff9800;
+            background: rgba(255, 152, 0, 0.3);
         }
 
-        /* พื้นที่เวิร์กสเปซสำหรับซูมและเลื่อนตาราง */
+        /* พื้นที่เวิร์กสเปซสำหรับซูมและลากเลื่อน */
         .workspace {
             flex: 1;
             position: relative;
             overflow: hidden;
-            background-color: #f8f9fa;
+            background-color: #12121c;
             cursor: grab;
             touch-action: none;
         }
@@ -111,50 +132,54 @@
 
         #stand-grid-container {
             display: grid;
-            gap: 6px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .stand-slot {
             width: 65px;
             height: 85px;
-            border: 2px dashed #cbd5e1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #ffffff;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #94a3b8;
+            border-radius: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
             cursor: pointer;
             position: relative;
-            transition: background 0.15s;
+            transition: all 0.2s;
         }
         .stand-slot:hover {
-            border-color: #3b82f6;
-            background: #eff6ff;
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.1);
+            color: #00d2ff;
         }
         .stand-slot img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
-        /* ปุ่มซูมลอยมุมขวาล่าง */
+        /* ปุ่มซูมลอยมุมขวาล่าง แบบเกมมิ่ง */
         .zoom-controls {
             position: fixed;
             bottom: 20px;
             right: 20px;
             display: flex;
             gap: 8px;
-            background: white;
+            background: rgba(30, 30, 45, 0.85);
+            backdrop-filter: blur(8px);
             padding: 8px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             z-index: 100;
         }
         .btn {
@@ -162,77 +187,101 @@
             font-size: 14px;
             font-weight: bold;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
-        .btn.primary { background-color: #007bff; color: white; }
-        .btn.secondary { background-color: #6c757d; color: white; }
-        .btn.danger { background-color: #dc3545; color: white; }
+        .btn.primary { background: linear-gradient(135deg, #007bff, #00d2ff); color: white; box-shadow: 0 4px 10px rgba(0,123,255,0.3); }
+        .btn.primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn.secondary { background: rgba(255,255,255,0.1); color: white; }
+        .btn.secondary:hover { background: rgba(255,255,255,0.2); }
+        .btn.danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; box-shadow: 0 4px 10px rgba(255,65,108,0.3); }
+        .btn.danger:hover { opacity: 0.9; }
 
-        /* Modal เลือกรูปจาก Firebase */
+        /* หน้าต่าง Modal เลือกตัวละครสไตล์ Minecraft Inventory UI */
         #firebase-modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(10, 10, 18, 0.8);
+            backdrop-filter: blur(5px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
         .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
+            background: #1e1e2f;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 16px;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
             max-height: 80vh;
             overflow-y: auto;
             text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+        .modal-content h3 {
+            color: #00d2ff;
+            margin-bottom: 8px;
         }
         .character-list {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px 0;
+            gap: 12px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
         }
         .char-item {
-            border: 1px solid #ddd;
-            padding: 8px;
-            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
             cursor: pointer;
-            background: #fafafa;
-            transition: 0.2s;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .char-item:hover {
-            border-color: #007bff;
-            background: #f0f8ff;
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.15);
+            transform: translateY(-2px);
         }
         .char-item img {
-            width: 100%;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             object-fit: cover;
-            border-radius: 4px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .empty-db-box {
+            grid-column: span 2;
+            padding: 20px;
+            text-align: center;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
 
     <div class="header-bar">
-        <h2>ออกแบบสแตนของคุณ</h2>
-        <button class="btn primary" onclick="window.location.href='index.html'">กลับหน้า Lobby</button>
+        <h2>✨ ออกแบบสแตนของคุณ</h2>
+        <button class="btn primary" onclick="window.location.href='index.html'">🏠 กลับหน้า Lobby</button>
     </div>
 
     <div class="main-layout">
-        <!-- แถบ UI ฝั่งซ้าย 4 ช่องท่า + 1 ช่องตั้งค่า -->
+        <!-- แถบ UI ฝั่งซ้าย (4 ช่องท่า + 1 ช่องตั้งค่า) -->
         <div class="sidebar-ui">
-            <div style="font-size: 11px; font-weight: bold; color: #555;">เลือกท่า</div>
-            <div class="pose-slot" id="pose-0" onclick="selectPose(0)">ท่า 1</div>
-            <div class="pose-slot" id="pose-1" onclick="selectPose(1)">ท่า 2</div>
-            <div class="pose-slot" id="pose-2" onclick="selectPose(2)">ท่า 3</div>
-            <div class="pose-slot" id="pose-3" onclick="selectPose(3)">ท่า 4</div>
-            <div style="width: 100%; height: 1px; background: #ddd; margin: 2px 0;"></div>
-            <div class="pose-slot settings-slot" onclick="openFirebaseSelector()" title="เลือกจาก DB">⚙️ เลือกจาก DB</div>
+            <div class="sidebar-title">ช่องท่า</div>
+            <div class="pose-slot" id="pose-0" onclick="selectPose(0)" title="ท่าที่ 1">1</div>
+            <div class="pose-slot" id="pose-1" onclick="selectPose(1)" title="ท่าที่ 2">2</div>
+            <div class="pose-slot" id="pose-2" onclick="selectPose(2)" title="ท่าที่ 3">3</div>
+            <div class="pose-slot" id="pose-3" onclick="selectPose(3)" title="ท่าที่ 4">4</div>
+            <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 2px 0;"></div>
+            <div class="pose-slot settings-slot" onclick="openFirebaseSelector()" title="เลือกจากฐานข้อมูล">⚙️ ตั้งค่า</div>
         </div>
 
         <!-- พื้นที่เวิร์กสเปซสำหรับซูมและลากเลื่อน -->
@@ -243,23 +292,23 @@
         </div>
     </div>
 
-    <!-- Modal เลือกตัวละครจาก Firebase -->
+    <!-- Modal เลือกตัวละครสไตล์ Inventory เกม -->
     <div id="firebase-modal">
         <div class="modal-content">
-            <h3>เลือกตัวละครจากฐานข้อมูล</h3>
-            <p style="font-size: 12px; color: #666; margin-bottom: 10px;">เลือกรูปที่ต้องการใส่ในช่องท่าทางฝั่งซ้าย</p>
+            <h3>คลังข้อมูลตัวละคร (Database)</h3>
+            <p style="font-size: 13px; color: #aaa; margin-bottom: 10px;">เลือกตัวละครเพื่อใส่ลงในช่องท่าทางฝั่งซ้าย</p>
             <div class="character-list" id="char-list-container">
                 กำลังโหลดข้อมูลจาก Firebase...
             </div>
-            <button class="btn danger" onclick="closeFirebaseSelector()" style="width: 100%;">ปิด</button>
+            <button class="btn danger" onclick="closeFirebaseSelector()" style="width: 100%; margin-top: 10px;">ปิดหน้าต่าง</button>
         </div>
     </div>
 
     <!-- ปุ่มควบคุมซูมลอยมุมขวาล่าง -->
     <div class="zoom-controls">
-        <button class="btn secondary" onclick="adjustZoom(0.1)">➕</button>
-        <button class="btn secondary" onclick="adjustZoom(-0.1)">➖</button>
-        <button class="btn danger" onclick="resetTransform()">🔄 รีเซ็ต</button>
+        <button class="btn secondary" onclick="adjustZoom(0.1)" title="ซูมเข้า">➕</button>
+        <button class="btn secondary" onclick="adjustZoom(-0.1)" title="ซูมออก">➖</button>
+        <button class="btn danger" onclick="resetTransform()" title="รีเซ็ตตำแหน่ง">🔄 รีเซ็ต</button>
     </div>
 
     <!-- เรียกใช้งาน Firebase SDK และ Script ควบคุม -->
@@ -285,7 +334,6 @@
         let poses = [null, null, null, null];
         let selectedPoseIndex = null;
         let targetSlotForSelection = 0;
-
         let gridRows = 9, gridCols = 8;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -312,7 +360,7 @@
                 slot.innerText = i;
                 
                 slot.onclick = (e) => {
-                    e.stopPropagation(); // ป้องกันไม่ให้ชนกับเหตุการณ์ลากจอ
+                    e.stopPropagation();
                     if (selectedPoseIndex !== null && poses[selectedPoseIndex]) {
                         slot.innerHTML = '';
                         const img = document.createElement('img');
@@ -325,7 +373,6 @@
                 container.appendChild(slot);
             }
             
-            // จัดตำแหน่งตารางให้อยู่กึ่งกลางหน้าจอพอดีหลังจากสร้างเสร็จ
             setTimeout(() => {
                 centerGrid();
             }, 50);
@@ -337,7 +384,7 @@
             });
 
             if (!poses[index]) {
-                alert(`ช่องท่าที่ ${index + 1} ยังว่างอยู่ กรุณากดปุ่ม "⚙️ เลือกจาก DB" เพื่อดึงรูปจาก Firebase มาใส่`);
+                alert(`ช่องท่าที่ ${index + 1} ยังว่างอยู่ กรุณากดปุ่ม "⚙️ ตั้งค่า" เพื่อดึงรูปจาก Firebase มาใส่`);
                 selectedPoseIndex = null;
                 return;
             }
@@ -347,7 +394,7 @@
         }
 
         window.openFirebaseSelector = async function() {
-            let slotNum = prompt("ต้องการใส่รูปลงในช่องท่าทางฝั่งซ้ายช่องไหน (1 - 4):", "1");
+            let slotNum = prompt("ต้องการใส่รูปลงในช่องท่าทางช่องไหน (1 - 4):", "1");
             let idx = parseInt(slotNum) - 1;
             if (idx >= 0 && idx < 4) {
                 targetSlotForSelection = idx;
@@ -364,21 +411,29 @@
 
         async function loadCharactersFromFirebase() {
             const container = document.getElementById('char-list-container');
-            container.innerHTML = 'กำลังโหลดข้อมูล...';
+            container.innerHTML = '<p style="grid-column: span 2; color: #aaa;">กำลังโหลดข้อมูล...</p>';
             try {
                 const querySnapshot = await getDocs(collection(db, "character_database"));
                 container.innerHTML = '';
+                
+                // ตรวจสอบว่าถ้าไม่มีข้อมูลในระบบ ให้แสดงปุ่มกลับหน้า Lobby ไปเพิ่มข้อมูลเอง
                 if (querySnapshot.empty) {
-                    container.innerHTML = '<p style="grid-column: span 2; color: #888;">ยังไม่มีข้อมูลในระบบ กรุณาเพิ่มข้อมูลจากหน้า Lobby ก่อน</p>';
+                    container.innerHTML = `
+                        <div class="empty-db-box">
+                            <p style="margin-bottom: 15px; color: #ffb74d;">⚠️ ยังไม่มีข้อมูลตัวละครในระบบฐานข้อมูล</p>
+                            <button class="btn primary" onclick="window.location.href='index.html'">ไปเพิ่มข้อมูลที่หน้า Lobby</button>
+                        </div>
+                    `;
                     return;
                 }
+
                 querySnapshot.forEach((doc) => {
                     let data = doc.data();
                     let div = document.createElement('div');
                     div.className = 'char-item';
                     div.innerHTML = `
                         <img src="${data.imageBase64}" alt="${data.name}">
-                        <div style="font-size: 12px; margin-top: 5px; font-weight: bold; color: #333;">${data.name}</div>
+                        <div style="font-size: 12px; font-weight: bold; color: #fff; text-align: center;">${data.name}</div>
                     `;
                     div.onclick = () => {
                         poses[targetSlotForSelection] = data.imageBase64;
@@ -391,15 +446,14 @@
                 });
             } catch (error) {
                 console.error("Error loading characters: ", error);
-                container.innerHTML = '<p style="color: red; grid-column: span 2;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                container.innerHTML = '<p style="color: #ff416c; grid-column: span 2;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
             }
         }
 
-        // ระบบเลื่อนและซูมที่ลื่นไหลรองรับทั้งเมาส์และนิ้วสัมผัส
+        // ระบบเลื่อนและซูม
         function initPanAndZoom() {
             const workspace = document.getElementById('workspace');
 
-            // Mouse Drag
             workspace.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 startX = e.clientX - panX;
@@ -413,7 +467,6 @@
             });
             window.addEventListener('mouseup', () => { isDragging = false; });
 
-            // Mouse Wheel Zoom
             workspace.addEventListener('wheel', (e) => {
                 e.preventDefault();
                 let zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
@@ -421,7 +474,6 @@
                 updateTransform();
             }, { passive: false });
 
-            // Touch Drag & Pinch Zoom (มือถือ)
             let initialDist = null;
             workspace.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1) {
@@ -470,12 +522,10 @@
             centerGrid();
         }
 
-        // คำนวณจัดตารางให้อยู่กึ่งกลางหน้าจอพอดี
         function centerGrid() {
             const workspace = document.getElementById('workspace');
             const container = document.getElementById('stand-grid-container');
             
-            // หาขนาดพื้นที่ว่างตรงกลาง (หักลบแถบเมนูซ้าย)
             let availableWidth = workspace.clientWidth;
             let availableHeight = workspace.clientHeight;
 
