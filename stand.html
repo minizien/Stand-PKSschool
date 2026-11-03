@@ -17,7 +17,6 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            touch-action: none;
         }
         .header-bar {
             padding: 10px 20px;
@@ -44,9 +43,10 @@
             flex-direction: column;
             align-items: center;
             padding: 15px 10px;
-            gap: 12px;
+            gap: 10px;
             z-index: 5;
             overflow-y: auto;
+            flex-shrink: 0;
         }
         .pose-slot {
             width: 55px;
@@ -64,6 +64,7 @@
             transition: all 0.2s;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
         .pose-slot:hover {
             border-color: #007bff;
@@ -88,22 +89,26 @@
             font-weight: bold;
             font-size: 10px;
         }
+
+        /* พื้นที่เวิร์กสเปซสำหรับซูมและเลื่อนตาราง */
         .workspace {
             flex: 1;
             position: relative;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background-color: #f8f9fa;
+            cursor: grab;
+            touch-action: none;
         }
+        .workspace:active {
+            cursor: grabbing;
+        }
+        
         #transform-wrapper {
             position: absolute;
             transform-origin: 0 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            will-change: transform;
         }
+
         #stand-grid-container {
             display: grid;
             gap: 6px;
@@ -138,6 +143,8 @@
             object-fit: cover;
             border-radius: 4px;
         }
+
+        /* ปุ่มซูมลอยมุมขวาล่าง */
         .zoom-controls {
             position: fixed;
             bottom: 20px;
@@ -148,7 +155,7 @@
             padding: 8px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            z-index: 10;
+            z-index: 100;
         }
         .btn {
             padding: 8px 14px;
@@ -163,7 +170,7 @@
         .btn.secondary { background-color: #6c757d; color: white; }
         .btn.danger { background-color: #dc3545; color: white; }
 
-        /* Modal สำหรับเลือกรูปจาก Firebase มาใส่ในช่อง UI ฝั่งซ้าย */
+        /* Modal เลือกรูปจาก Firebase */
         #firebase-modal {
             display: none;
             position: fixed;
@@ -224,10 +231,11 @@
             <div class="pose-slot" id="pose-1" onclick="selectPose(1)">ท่า 2</div>
             <div class="pose-slot" id="pose-2" onclick="selectPose(2)">ท่า 3</div>
             <div class="pose-slot" id="pose-3" onclick="selectPose(3)">ท่า 4</div>
-            <div style="width: 100%; height: 1px; background: #ddd; margin: 5px 0;"></div>
-            <div class="pose-slot settings-slot" onclick="openFirebaseSelector()">⚙️ เลือกจาก DB</div>
+            <div style="width: 100%; height: 1px; background: #ddd; margin: 2px 0;"></div>
+            <div class="pose-slot settings-slot" onclick="openFirebaseSelector()" title="เลือกจาก DB">⚙️ เลือกจาก DB</div>
         </div>
 
+        <!-- พื้นที่เวิร์กสเปซสำหรับซูมและลากเลื่อน -->
         <div class="workspace" id="workspace">
             <div id="transform-wrapper">
                 <div id="stand-grid-container"></div>
@@ -247,6 +255,7 @@
         </div>
     </div>
 
+    <!-- ปุ่มควบคุมซูมลอยมุมขวาล่าง -->
     <div class="zoom-controls">
         <button class="btn secondary" onclick="adjustZoom(0.1)">➕</button>
         <button class="btn secondary" onclick="adjustZoom(-0.1)">➖</button>
@@ -277,15 +286,16 @@
         let selectedPoseIndex = null;
         let targetSlotForSelection = 0;
 
+        let gridRows = 9, gridCols = 8;
+
         window.addEventListener('DOMContentLoaded', () => {
             let input = prompt("กรุณากรอกจำนวนน้องในสแตนในรูปแบบ แถว×คอลัมน์ (เช่น 9×8):", "9×8");
-            let rows = 9, cols = 8;
             if (input) {
                 let parts = input.toLowerCase().replace('×', 'x').split('x');
-                rows = parseInt(parts[0]) || 9;
-                cols = parseInt(parts[1]) || 8;
+                gridRows = parseInt(parts[0]) || 9;
+                gridCols = parseInt(parts[1]) || 8;
             }
-            generateGrid(rows, cols);
+            generateGrid(gridRows, gridCols);
             initPanAndZoom();
         });
 
@@ -301,7 +311,8 @@
                 slot.dataset.id = i;
                 slot.innerText = i;
                 
-                slot.onclick = () => {
+                slot.onclick = (e) => {
+                    e.stopPropagation(); // ป้องกันไม่ให้ชนกับเหตุการณ์ลากจอ
                     if (selectedPoseIndex !== null && poses[selectedPoseIndex]) {
                         slot.innerHTML = '';
                         const img = document.createElement('img');
@@ -313,7 +324,11 @@
                 };
                 container.appendChild(slot);
             }
-            setTimeout(() => centerGrid(), 50);
+            
+            // จัดตำแหน่งตารางให้อยู่กึ่งกลางหน้าจอพอดีหลังจากสร้างเสร็จ
+            setTimeout(() => {
+                centerGrid();
+            }, 50);
         }
 
         window.selectPose = function(index) {
@@ -331,7 +346,6 @@
             document.getElementById(`pose-${index}`).classList.add('active');
         }
 
-        // เปิด Modal เลือกรูปจาก Firebase Firestore (คอลเลกชัน character_database)
         window.openFirebaseSelector = async function() {
             let slotNum = prompt("ต้องการใส่รูปลงในช่องท่าทางฝั่งซ้ายช่องไหน (1 - 4):", "1");
             let idx = parseInt(slotNum) - 1;
@@ -381,8 +395,11 @@
             }
         }
 
+        // ระบบเลื่อนและซูมที่ลื่นไหลรองรับทั้งเมาส์และนิ้วสัมผัส
         function initPanAndZoom() {
             const workspace = document.getElementById('workspace');
+
+            // Mouse Drag
             workspace.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 startX = e.clientX - panX;
@@ -396,16 +413,55 @@
             });
             window.addEventListener('mouseup', () => { isDragging = false; });
 
+            // Mouse Wheel Zoom
             workspace.addEventListener('wheel', (e) => {
                 e.preventDefault();
                 let zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
-                scale = Math.min(Math.max(0.3, scale * zoomFactor), 4);
+                scale = Math.min(Math.max(0.2, scale * zoomFactor), 5);
                 updateTransform();
             }, { passive: false });
+
+            // Touch Drag & Pinch Zoom (มือถือ)
+            let initialDist = null;
+            workspace.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX - panX;
+                    startY = e.touches[0].clientY - panY;
+                } else if (e.touches.length === 2) {
+                    isDragging = false;
+                    initialDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            });
+
+            workspace.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    panX = e.touches[0].clientX - startX;
+                    panY = e.touches[0].clientY - startY;
+                    updateTransform();
+                } else if (e.touches.length === 2 && initialDist) {
+                    let currentDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    let zoomFactor = currentDist / initialDist;
+                    scale = Math.min(Math.max(0.2, scale * zoomFactor), 5);
+                    initialDist = currentDist;
+                    updateTransform();
+                }
+            }, { passive: true });
+
+            workspace.addEventListener('touchend', () => {
+                isDragging = false;
+                initialDist = null;
+            });
         }
 
         window.adjustZoom = function(amount) {
-            scale = Math.min(Math.max(0.3, scale + amount), 4);
+            scale = Math.min(Math.max(0.2, scale + amount), 5);
             updateTransform();
         }
 
@@ -414,11 +470,17 @@
             centerGrid();
         }
 
+        // คำนวณจัดตารางให้อยู่กึ่งกลางหน้าจอพอดี
         function centerGrid() {
             const workspace = document.getElementById('workspace');
             const container = document.getElementById('stand-grid-container');
-            panX = (workspace.clientWidth - container.offsetWidth) / 2;
-            panY = (workspace.clientHeight - container.offsetHeight) / 2;
+            
+            // หาขนาดพื้นที่ว่างตรงกลาง (หักลบแถบเมนูซ้าย)
+            let availableWidth = workspace.clientWidth;
+            let availableHeight = workspace.clientHeight;
+
+            panX = (availableWidth - container.offsetWidth) / 2;
+            panY = (availableHeight - container.offsetHeight) / 2;
             updateTransform();
         }
 
