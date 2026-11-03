@@ -32,7 +32,6 @@
         }
         .header-bar h2 {
             font-size: 18px;
-            letter-spacing: 0.5px;
             color: #00d2ff;
         }
         
@@ -43,75 +42,108 @@
             overflow: hidden;
         }
 
-        /* แถบ UI ฝั่งซ้าย สไตล์ช่องไอเทมเกม */
-        .sidebar-ui {
-            width: 90px;
-            background: rgba(30, 30, 45, 0.9);
+        /* แผงคลังไอเทม/ตัวละครฝั่งซ้าย (สไตล์ Minecraft Inventory เลื่อนลงได้ยาวๆ) */
+        .inventory-sidebar {
+            width: 160px;
+            background: rgba(30, 30, 45, 0.95);
             backdrop-filter: blur(8px);
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 10px;
-            gap: 12px;
+            padding: 12px 8px;
+            gap: 10px;
             z-index: 5;
-            overflow-y: auto;
             flex-shrink: 0;
         }
-        .sidebar-title {
-            font-size: 10px;
+        .inventory-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #00d2ff;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #a0a0c0;
-            margin-bottom: -4px;
+            text-align: center;
+            margin-bottom: 5px;
         }
-        .pose-slot {
-            width: 60px;
-            height: 60px;
-            background: rgba(50, 50, 70, 0.6);
+        .inventory-grid {
+            flex: 1;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            overflow-y: auto;
+            padding-right: 2px;
+            align-content: start;
+        }
+        .inv-slot {
+            aspect-ratio: 1;
+            background: rgba(50, 50, 70, 0.7);
             border: 2px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
+            border-radius: 8px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            font-size: 12px;
-            color: #ccc;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             position: relative;
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
-        .pose-slot:hover {
+        .inv-slot:hover {
             border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-            transform: translateY(-2px);
+            background: rgba(0, 210, 255, 0.15);
+            transform: scale(1.03);
         }
-        .pose-slot.active {
+        .inv-slot.selected {
             border: 3px solid #00d2ff;
-            background: rgba(0, 210, 255, 0.2);
-            color: #00d2ff;
-            font-weight: bold;
-            box-shadow: 0 0 12px rgba(0, 210, 255, 0.4);
+            background: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
         }
-        .pose-slot img {
+        .inv-slot img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .settings-slot {
-            background: rgba(255, 152, 0, 0.2);
-            border-color: rgba(255, 152, 0, 0.4);
-            color: #ffb74d;
-            font-size: 11px;
-            font-weight: bold;
+        .inv-slot span {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.7);
+            font-size: 9px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 1px 2px;
+            color: #fff;
         }
-        .settings-slot:hover {
-            border-color: #ff9800;
-            background: rgba(255, 152, 0, 0.3);
+        .empty-hint {
+            grid-column: span 2;
+            font-size: 11px;
+            color: #aaa;
+            text-align: center;
+            padding: 20px 5px;
         }
 
-        /* พื้นที่เวิร์กสเปซสำหรับซูมและลากเลื่อน */
+        /* ปุ่มพิกัดจัดการข้อมูล */
+        .btn-db-action {
+            width: 100%;
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            background: rgba(255, 152, 0, 0.2);
+            border: 1px solid rgba(255, 152, 0, 0.4);
+            color: #ffb74d;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-db-action:hover {
+            background: rgba(255, 152, 0, 0.4);
+        }
+
+        /* พื้นที่เวิร์กสเปซตารางสแตน */
         .workspace {
             flex: 1;
             position: relative;
@@ -153,7 +185,7 @@
             color: rgba(255, 255, 255, 0.4);
             cursor: pointer;
             position: relative;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
         .stand-slot:hover {
             border-color: #00d2ff;
@@ -167,7 +199,7 @@
             border-radius: 6px;
         }
 
-        /* ปุ่มซูมลอยมุมขวาล่าง แบบเกมมิ่ง */
+        /* ปุ่มซูมลอยมุมขวาล่าง */
         .zoom-controls {
             position: fixed;
             bottom: 20px;
@@ -191,78 +223,12 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .btn.primary { background: linear-gradient(135deg, #007bff, #00d2ff); color: white; box-shadow: 0 4px 10px rgba(0,123,255,0.3); }
-        .btn.primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn.primary { background: linear-gradient(135deg, #007bff, #00d2ff); color: white; }
+        .btn.primary:hover { opacity: 0.9; }
         .btn.secondary { background: rgba(255,255,255,0.1); color: white; }
         .btn.secondary:hover { background: rgba(255,255,255,0.2); }
-        .btn.danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; box-shadow: 0 4px 10px rgba(255,65,108,0.3); }
+        .btn.danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; }
         .btn.danger:hover { opacity: 0.9; }
-
-        /* หน้าต่าง Modal เลือกตัวละครสไตล์ Minecraft Inventory UI */
-        #firebase-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 18, 0.8);
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: #1e1e2f;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 25px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 420px;
-            max-height: 80vh;
-            overflow-y: auto;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-        }
-        .modal-content h3 {
-            color: #00d2ff;
-            margin-bottom: 8px;
-        }
-        .character-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 20px 0;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        .char-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .char-item:hover {
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.15);
-            transform: translateY(-2px);
-        }
-        .char-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-        .empty-db-box {
-            grid-column: span 2;
-            padding: 20px;
-            text-align: center;
-            color: #aaa;
-        }
     </style>
 </head>
 <body>
@@ -273,15 +239,13 @@
     </div>
 
     <div class="main-layout">
-        <!-- แถบ UI ฝั่งซ้าย (4 ช่องท่า + 1 ช่องตั้งค่า) -->
-        <div class="sidebar-ui">
-            <div class="sidebar-title">ช่องท่า</div>
-            <div class="pose-slot" id="pose-0" onclick="selectPose(0)" title="ท่าที่ 1">1</div>
-            <div class="pose-slot" id="pose-1" onclick="selectPose(1)" title="ท่าที่ 2">2</div>
-            <div class="pose-slot" id="pose-2" onclick="selectPose(2)" title="ท่าที่ 3">3</div>
-            <div class="pose-slot" id="pose-3" onclick="selectPose(3)" title="ท่าที่ 4">4</div>
-            <div style="width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 2px 0;"></div>
-            <div class="pose-slot settings-slot" onclick="openFirebaseSelector()" title="เลือกจากฐานข้อมูล">⚙️ ตั้งค่า</div>
+        <!-- แผงคลังตัวละครฝั่งซ้าย (เลื่อนดูได้ยาวๆ เป็นร้อยเป็นพันรูป) -->
+        <div class="inventory-sidebar">
+            <div class="inventory-title">📦 คลังตัวละคร</div>
+            <div class="inventory-grid" id="inventory-grid">
+                <div class="empty-hint">กำลังโหลดข้อมูลจาก DB...</div>
+            </div>
+            <button class="btn-db-action" onclick="window.location.href='index.html'">➕ เพิ่มรูปใน Lobby</button>
         </div>
 
         <!-- พื้นที่เวิร์กสเปซสำหรับซูมและลากเลื่อน -->
@@ -292,18 +256,6 @@
         </div>
     </div>
 
-    <!-- Modal เลือกตัวละครสไตล์ Inventory เกม -->
-    <div id="firebase-modal">
-        <div class="modal-content">
-            <h3>คลังข้อมูลตัวละคร (Database)</h3>
-            <p style="font-size: 13px; color: #aaa; margin-bottom: 10px;">เลือกตัวละครเพื่อใส่ลงในช่องท่าทางฝั่งซ้าย</p>
-            <div class="character-list" id="char-list-container">
-                กำลังโหลดข้อมูลจาก Firebase...
-            </div>
-            <button class="btn danger" onclick="closeFirebaseSelector()" style="width: 100%; margin-top: 10px;">ปิดหน้าต่าง</button>
-        </div>
-    </div>
-
     <!-- ปุ่มควบคุมซูมลอยมุมขวาล่าง -->
     <div class="zoom-controls">
         <button class="btn secondary" onclick="adjustZoom(0.1)" title="ซูมเข้า">➕</button>
@@ -311,7 +263,7 @@
         <button class="btn danger" onclick="resetTransform()" title="รีเซ็ตตำแหน่ง">🔄 รีเซ็ต</button>
     </div>
 
-    <!-- เรียกใช้งาน Firebase SDK และ Script ควบคุม -->
+    <!-- Script ควบคุมระบบและการดึงข้อมูล Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -331,22 +283,22 @@
 
         let scale = 1, panX = 0, panY = 0;
         let isDragging = false, startX = 0, startY = 0;
-        let poses = [null, null, null, null];
-        let selectedPoseIndex = null;
-        let targetSlotForSelection = 0;
-        let gridRows = 9, gridCols = 8;
+        let selectedCharacterImage = null; // เก็บรูปที่เลือกจากคลังซ้าย
 
         window.addEventListener('DOMContentLoaded', () => {
             let input = prompt("กรุณากรอกจำนวนน้องในสแตนในรูปแบบ แถว×คอลัมน์ (เช่น 9×8):", "9×8");
+            let rows = 9, cols = 8;
             if (input) {
                 let parts = input.toLowerCase().replace('×', 'x').split('x');
-                gridRows = parseInt(parts[0]) || 9;
-                gridCols = parseInt(parts[1]) || 8;
+                rows = parseInt(parts[0]) || 9;
+                cols = parseInt(parts[1]) || 8;
             }
-            generateGrid(gridRows, gridCols);
+            generateGrid(rows, cols);
             initPanAndZoom();
+            loadInventoryFromFirebase();
         });
 
+        // สร้างตารางสแตน
         function generateGrid(rows, cols) {
             const container = document.getElementById('stand-grid-container');
             container.style.gridTemplateColumns = `repeat(${cols}, 65px)`;
@@ -359,15 +311,16 @@
                 slot.dataset.id = i;
                 slot.innerText = i;
                 
+                // เมื่อคลิกช่องสแตนให้นำรูปที่เลือกจากคลังฝั่งซ้ายมาวาง
                 slot.onclick = (e) => {
                     e.stopPropagation();
-                    if (selectedPoseIndex !== null && poses[selectedPoseIndex]) {
+                    if (selectedCharacterImage) {
                         slot.innerHTML = '';
                         const img = document.createElement('img');
-                        img.src = poses[selectedPoseIndex];
+                        img.src = selectedCharacterImage;
                         slot.appendChild(img);
                     } else {
-                        alert(`ช่องที่ ${i}: กรุณาเลือกท่าจากแถบซ้ายมือก่อนคลิกวาง`);
+                        alert(`ช่องที่ ${i}: กรุณาจิ้มเลือกตัวละครจากคลังซ้ายมือก่อนนำมาวางครับ!`);
                     }
                 };
                 container.appendChild(slot);
@@ -378,50 +331,17 @@
             }, 50);
         }
 
-        window.selectPose = function(index) {
-            document.querySelectorAll('.pose-slot').forEach((el, idx) => {
-                if(idx < 4) el.classList.remove('active');
-            });
-
-            if (!poses[index]) {
-                alert(`ช่องท่าที่ ${index + 1} ยังว่างอยู่ กรุณากดปุ่ม "⚙️ ตั้งค่า" เพื่อดึงรูปจาก Firebase มาใส่`);
-                selectedPoseIndex = null;
-                return;
-            }
-
-            selectedPoseIndex = index;
-            document.getElementById(`pose-${index}`).classList.add('active');
-        }
-
-        window.openFirebaseSelector = async function() {
-            let slotNum = prompt("ต้องการใส่รูปลงในช่องท่าทางช่องไหน (1 - 4):", "1");
-            let idx = parseInt(slotNum) - 1;
-            if (idx >= 0 && idx < 4) {
-                targetSlotForSelection = idx;
-                document.getElementById('firebase-modal').style.display = 'flex';
-                await loadCharactersFromFirebase();
-            } else if (slotNum !== null) {
-                alert("กรุณาระบุตัวเลขระหว่าง 1 ถึง 4 ครับ");
-            }
-        }
-
-        window.closeFirebaseSelector = function() {
-            document.getElementById('firebase-modal').style.display = 'none';
-        }
-
-        async function loadCharactersFromFirebase() {
-            const container = document.getElementById('char-list-container');
-            container.innerHTML = '<p style="grid-column: span 2; color: #aaa;">กำลังโหลดข้อมูล...</p>';
+        // โหลดข้อมูลตัวละครทั้งหมดจาก Firebase มารวมไว้ที่แผงซ้าย
+        async function loadInventoryFromFirebase() {
+            const container = document.getElementById('inventory-grid');
             try {
                 const querySnapshot = await getDocs(collection(db, "character_database"));
                 container.innerHTML = '';
                 
-                // ตรวจสอบว่าถ้าไม่มีข้อมูลในระบบ ให้แสดงปุ่มกลับหน้า Lobby ไปเพิ่มข้อมูลเอง
                 if (querySnapshot.empty) {
                     container.innerHTML = `
-                        <div class="empty-db-box">
-                            <p style="margin-bottom: 15px; color: #ffb74d;">⚠️ ยังไม่มีข้อมูลตัวละครในระบบฐานข้อมูล</p>
-                            <button class="btn primary" onclick="window.location.href='index.html'">ไปเพิ่มข้อมูลที่หน้า Lobby</button>
+                        <div class="empty-hint">
+                            ยังไม่มีข้อมูล<br>ไปเพิ่มใน Lobby ก่อนครับ
                         </div>
                     `;
                     return;
@@ -429,28 +349,29 @@
 
                 querySnapshot.forEach((doc) => {
                     let data = doc.data();
-                    let div = document.createElement('div');
-                    div.className = 'char-item';
-                    div.innerHTML = `
+                    let slot = document.createElement('div');
+                    slot.className = 'inv-slot';
+                    slot.innerHTML = `
                         <img src="${data.imageBase64}" alt="${data.name}">
-                        <div style="font-size: 12px; font-weight: bold; color: #fff; text-align: center;">${data.name}</div>
+                        <span>${data.name}</span>
                     `;
-                    div.onclick = () => {
-                        poses[targetSlotForSelection] = data.imageBase64;
-                        const slotUI = document.getElementById(`pose-${targetSlotForSelection}`);
-                        slotUI.innerHTML = `<img src="${data.imageBase64}" title="${data.name}">`;
-                        closeFirebaseSelector();
-                        selectPose(targetSlotForSelection);
+                    
+                    // เมื่อคลิกเลือกตัวละครจากคลังซ้าย
+                    slot.onclick = () => {
+                        document.querySelectorAll('.inv-slot').forEach(s => s.classList.remove('selected'));
+                        slot.classList.add('selected');
+                        selectedCharacterImage = data.imageBase64;
                     };
-                    container.appendChild(div);
+                    
+                    container.appendChild(slot);
                 });
             } catch (error) {
-                console.error("Error loading characters: ", error);
-                container.innerHTML = '<p style="color: #ff416c; grid-column: span 2;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                console.error("Error loading inventory: ", error);
+                container.innerHTML = '<div class="empty-hint" style="color:#ff416c;">โหลดข้อมูลพลาด</div>';
             }
         }
 
-        // ระบบเลื่อนและซูม
+        // ระบบเลื่อนและซูมตารางสแตน
         function initPanAndZoom() {
             const workspace = document.getElementById('workspace');
 
