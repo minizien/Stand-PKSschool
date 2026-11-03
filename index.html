@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby - เว็บสแตน</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="lobby-container">
+        <h1>Lobby เว็บสแตน</h1>
+        <p>ยินดีต้อนรับเข้าสู่ระบบจัดการและสร้างสแตน</p>
+        
+        <div class="button-group">
+            <!-- ปุ่มกดสร้าง เด้งไปหน้า stand.html -->
+            <button id="btn-create" class="btn primary">กดสร้างสแตน</button>
+            
+            <!-- ปุ่มบวกฐานข้อมูล (เชื่อมต่อ Firebase ใน script.js) -->
+            <button id="btn-database" class="btn secondary">กดบวกฐานข้อมูล</button>
+            
+            <!-- ปุ่มแจ้งบัค (ส่งข้อมูลเข้า Firebase ใน script.js) -->
+            <button id="btn-bug" class="btn danger">แจ้งบัค / รายงานปัญหา</button>
+        </div>
+    </div>
+
+    <!-- นำเข้า Firebase SDK และ Script หลัก -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
