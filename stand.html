@@ -1,223 +1,130 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>ระบบออกแบบสแตน - เว็บสแตน</title>
+    <title>🎨 ระบบออกแบบสแตน</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #ffffff;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            color: #333;
+            color: #202124;
         }
         .header-bar {
             padding: 12px 20px;
             background: #ffffff;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #dadce0;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             z-index: 10;
         }
-        .header-bar h2 {
-            font-size: 18px;
-            color: #1a73e8;
-        }
-        
-        .main-layout {
-            display: flex;
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
+        .header-bar h2 { font-size: 18px; color: #1a73e8; }
+        .main-layout { display: flex; flex: 1; position: relative; overflow: hidden; }
 
-        /* แผงคลังตัวละครฝั่งซ้าย สไตล์ Minecraft Inventory โหมดสว่าง เลื่อนลงได้ไม่จำกัด */
-        .inventory-sidebar {
-            width: 150px;
+        /* แถบ UI ฝั่งซ้าย: 4 ช่องท่า + 1 ช่องตั้งค่า */
+        .sidebar-ui {
+            width: 90px;
             background: #ffffff;
-            border-right: 1px solid #e0e0e0;
+            border-right: 1px solid #dadce0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 12px 8px;
+            padding: 15px 10px;
             gap: 10px;
             z-index: 5;
             flex-shrink: 0;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.02);
         }
-        .inventory-title {
-            font-size: 11px;
-            font-weight: bold;
-            color: #5f6368;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-align: center;
-        }
-        .inventory-grid {
-            flex: 1;
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-            overflow-y: auto;
-            padding-right: 2px;
-            align-content: start;
-        }
-        .inv-slot {
-            aspect-ratio: 1;
+        .sidebar-title { font-size: 10px; font-weight: bold; color: #5f6368; text-transform: uppercase; }
+        .pose-slot {
+            width: 60px; height: 60px;
             background: #f8f9fa;
             border: 2px solid #dadce0;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            font-size: 12px;
+            color: #3c4043;
             transition: all 0.2s;
             position: relative;
             overflow: hidden;
         }
-        .inv-slot:hover {
-            border-color: #1a73e8;
-            background: #e8f0fe;
-        }
-        .inv-slot.selected {
-            border: 3px solid #1a73e8;
-            background: #e8f0fe;
-            box-shadow: 0 0 8px rgba(26, 115, 232, 0.3);
-        }
-        .inv-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .inv-slot span {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            font-size: 8px;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 1px;
-            color: #fff;
-        }
-        .empty-hint {
-            grid-column: span 2;
-            font-size: 11px;
-            color: #70757a;
-            text-align: center;
-            padding: 15px 5px;
-        }
+        .pose-slot:hover { border-color: #1a73e8; background: #e8f0fe; }
+        .pose-slot.active { border: 3px solid #1a73e8; background: #e8f0fe; color: #1a73e8; font-weight: bold; }
+        .pose-slot img { width: 100%; height: 100%; object-fit: cover; }
+        .settings-slot { background: #f1f3f4; border-color: #bdc1c6; color: #202124; font-weight: bold; }
 
-        .btn-db-action {
-            width: 100%;
-            padding: 8px;
-            font-size: 11px;
-            font-weight: bold;
-            background: #e8f0fe;
-            border: 1px solid #1a73e8;
-            color: #1a73e8;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-db-action:hover {
-            background: #d2e3fc;
-        }
-
-        /* พื้นที่เวิร์กสเปซตารางสแตน โหมดสว่าง */
+        /* พื้นที่เวิร์กสเปซโหมดสว่าง */
         .workspace {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            background-color: #eef2f5;
-            cursor: grab;
-            touch-action: none;
+            flex: 1; position: relative; overflow: hidden;
+            background-color: #f8f9fa; cursor: grab; touch-action: none;
         }
-        .workspace:active {
-            cursor: grabbing;
-        }
-        
-        #transform-wrapper {
-            position: absolute;
-            transform-origin: 0 0;
-            will-change: transform;
-        }
+        .workspace:active { cursor: grabbing; }
+        #transform-wrapper { position: absolute; transform-origin: 0 0; will-change: transform; }
 
         #stand-grid-container {
-            display: grid;
-            gap: 8px;
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid #dadce0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: grid; gap: 8px; background: #ffffff;
+            padding: 25px; border-radius: 12px; border: 1px solid #dadce0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         }
         .stand-slot {
-            width: 65px;
-            height: 85px;
-            background: #f8f9fa;
-            border: 2px dashed #bdc1c6;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 8px;
-            font-size: 12px;
-            color: #70757a;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.15s;
+            width: 65px; height: 85px; background: #f8f9fa;
+            border: 2px dashed #bdc1c6; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border-radius: 8px;
+            font-size: 12px; color: #70757a; cursor: pointer; position: relative; transition: all 0.15s;
         }
-        .stand-slot:hover {
-            border-color: #1a73e8;
-            background: #e8f0fe;
-            color: #1a73e8;
-        }
-        .stand-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 6px;
-        }
+        .stand-slot:hover { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; }
+        .stand-slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
 
-        /* ปุ่มควบคุมซูมลอยมุมขวาล่าง โหมดสว่าง */
+        /* หน้าต่าง Modal เลือกท่าทางสไตล์มายคราฟ (โหมดสว่าง) */
+        #minecraft-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(3px);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-box {
+            background: #ffffff; border: 1px solid #dadce0; padding: 20px;
+            border-radius: 12px; width: 90%; max-width: 420px; max-height: 80vh;
+            display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .modal-header h3 { color: #1a73e8; font-size: 16px; }
+        .search-box {
+            width: 100%; padding: 8px 12px; border: 1px solid #dadce0;
+            border-radius: 8px; font-size: 14px; margin-bottom: 12px; outline: none;
+        }
+        .search-box:focus { border-color: #1a73e8; }
+        .inventory-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            overflow-y: auto; max-height: 250px; padding: 4px; flex: 1;
+        }
+        .inv-item {
+            background: #f8f9fa; border: 2px solid #dadce0; border-radius: 8px;
+            padding: 6px; text-align: center; cursor: pointer; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .inv-item:hover { border-color: #1a73e8; background: #e8f0fe; }
+        .inv-item img { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; margin-bottom: 4px; }
+        .inv-item span { font-size: 10px; color: #3c4043; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+
+        /* ปุ่มซูมลอยมุมขวาล่าง */
         .zoom-controls {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            gap: 8px;
-            background: #ffffff;
-            padding: 8px;
-            border-radius: 12px;
-            border: 1px solid #dadce0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 100;
+            position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px;
+            background: #ffffff; padding: 8px; border-radius: 12px;
+            border: 1px solid #dadce0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 100;
         }
         .btn {
-            padding: 8px 14px;
-            font-size: 14px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: 8px 14px; font-size: 14px; font-weight: bold; border: none;
+            border-radius: 8px; cursor: pointer; transition: all 0.2s;
         }
         .btn.primary { background-color: #1a73e8; color: white; }
         .btn.primary:hover { background-color: #1557b0; }
@@ -230,21 +137,23 @@
 <body>
 
     <div class="header-bar">
-        <h2>✨ ออกแบบสแตนของคุณ</h2>
-        <button class="btn primary" onclick="window.location.href='index.html'">🏠 กลับหน้า Lobby</button>
+        <h2>PKSstand</h2>
+        <button class="btn primary" onclick="window.location.href='index.html'"> 《 Lobby</button>
     </div>
 
     <div class="main-layout">
-        <!-- แผงคลังตัวละครฝั่งซ้าย เลื่อนดูได้ยาวๆ ไม่จำกัด -->
-        <div class="inventory-sidebar">
-            <div class="inventory-title">📦 คลังตัวละคร</div>
-            <div class="inventory-grid" id="inventory-grid">
-                <div class="empty-hint">กำลังโหลด...</div>
-            </div>
-            <button class="btn-db-action" onclick="window.location.href='index.html'">➕ เพิ่มรูปใน Lobby</button>
+        <!-- แถบ UI ฝั่งซ้าย: 4 ช่องท่า + 1 ช่องตั้งค่า -->
+        <div class="sidebar-ui">
+            <div class="sidebar-title">ท่าทาง</div>
+            <div class="pose-slot" id="pose-0" onclick="selectPose(0)" draggable="true" ondragstart="dragPose(event, 0)" title="ท่า 1">1</div>
+            <div class="pose-slot" id="pose-1" onclick="selectPose(1)" draggable="true" ondragstart="dragPose(event, 1)" title="ท่า 2">2</div>
+            <div class="pose-slot" id="pose-2" onclick="selectPose(2)" draggable="true" ondragstart="dragPose(event, 2)" title="ท่า 3">3</div>
+            <div class="pose-slot" id="pose-3" onclick="selectPose(3)" draggable="true" ondragstart="dragPose(event, 3)" title="ท่า 4">4</div>
+            <div style="width: 100%; height: 1px; background: #dadce0; margin: 4px 0;"></div>
+            <div class="pose-slot settings-slot" onclick="openSettingsModal()" title="ตั้งค่าท่า">⚙️</div>
         </div>
 
-        <!-- พื้นที่เวิร์กสเปซสำหรับซูมและลากเลื่อน -->
+        <!-- พื้นที่เวิร์กสเปซตารางสแตน -->
         <div class="workspace" id="workspace">
             <div id="transform-wrapper">
                 <div id="stand-grid-container"></div>
@@ -252,14 +161,28 @@
         </div>
     </div>
 
-    <!-- ปุ่มควบคุมซูมลอยมุมขวาล่าง -->
+    <!-- หน้าต่าง Modal ตั้งค่า/เปลี่ยนท่า 1-4 สไตล์มายคราฟ พร้อมช่องเสิร์ชและลากวาง -->
+    <div id="minecraft-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">⚙️ ตั้งค่าท่าทาง</h3>
+                <button class="btn secondary" style="padding: 4px 8px; font-size: 12px;" onclick="closeSettingsModal()">❌</button>
+            </div>
+            <input type="text" id="search-input" class="search-box" placeholder="🔍 ค้นหาตัวละคร..." oninput="filterInventory()">
+            <div class="inventory-grid" id="modal-inventory-grid">
+                กำลังโหลดข้อมูล...
+            </div>
+            <button class="btn danger" onclick="closeSettingsModal()" style="width: 100%; margin-top: 10px;">ปิด</button>
+        </div>
+    </div>
+
+    <!-- ปุ่มซูมลอยมุมขวาล่าง -->
     <div class="zoom-controls">
         <button class="btn secondary" onclick="adjustZoom(0.1)" title="ซูมเข้า">➕</button>
         <button class="btn secondary" onclick="adjustZoom(-0.1)" title="ซูมออก">➖</button>
-        <button class="btn danger" onclick="resetTransform()" title="รีเซ็ตตำแหน่ง">🔄 รีเซ็ต</button>
+        <button class="btn danger" onclick="resetTransform()" title="รีเซ็ต">🔄</button>
     </div>
 
-    <!-- Script ควบคุมระบบและการดึงข้อมูล Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -279,10 +202,13 @@
 
         let scale = 1, panX = 0, panY = 0;
         let isDragging = false, startX = 0, startY = 0;
-        let selectedCharacterImage = null; // เก็บรูปที่จิ้มเลือกจากคลังซ้าย
+        let poses = [null, null, null, null];
+        let selectedPoseIndex = null;
+        let configuringSlotIndex = 0;
+        let allCharacters = [];
 
         window.addEventListener('DOMContentLoaded', () => {
-            let input = prompt("กรุณากรอกจำนวนน้องในสแตนในรูปแบบ แถว×คอลัมน์ (เช่น 9×8):", "9×8");
+            let input = prompt("กรุณากรอกจำนวนน้องในสแตน แถว×คอลัมน์ (เช่น 9×8):", "9×8");
             let rows = 9, cols = 8;
             if (input) {
                 let parts = input.toLowerCase().replace('×', 'x').split('x');
@@ -291,10 +217,21 @@
             }
             generateGrid(rows, cols);
             initPanAndZoom();
-            loadInventoryFromFirebase();
+            fetchAllCharacters();
         });
 
-        // สร้างตารางสแตน
+        async function fetchAllCharacters() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "character_database"));
+                allCharacters = [];
+                querySnapshot.forEach((doc) => {
+                    allCharacters.push(doc.data());
+                });
+            } catch (error) {
+                console.error("Error loading DB: ", error);
+            }
+        }
+
         function generateGrid(rows, cols) {
             const container = document.getElementById('stand-grid-container');
             container.style.gridTemplateColumns = `repeat(${cols}, 65px)`;
@@ -307,79 +244,117 @@
                 slot.dataset.id = i;
                 slot.innerText = i;
                 
-                // เมื่อคลิกช่องสแตน ให้นำรูปที่เลือกจากคลังฝั่งซ้ายมาวางทันที
+                // รองรับการคลิกวางท่าที่เลือกอยู่
                 slot.onclick = (e) => {
                     e.stopPropagation();
-                    if (selectedCharacterImage) {
+                    if (selectedPoseIndex !== null && poses[selectedPoseIndex]) {
                         slot.innerHTML = '';
                         const img = document.createElement('img');
-                        img.src = selectedCharacterImage;
+                        img.src = poses[selectedPoseIndex];
                         slot.appendChild(img);
                     } else {
-                        alert(`ช่องที่ ${i}: กรุณาจิ้มเลือกตัวละครจากคลังซ้ายมือก่อนนำมาวางครับ!`);
+                        alert(`ช่องที่ ${i}: กรุณาเลือกท่าจากช่อง 1-4 ฝั่งซ้ายก่อนคลิกวาง!`);
                     }
                 };
+
+                // รองรับการลาก (Drag & Drop) มาวางบนสแตน
+                slot.ondragover = (e) => e.preventDefault();
+                slot.ondrop = (e) => {
+                    e.preventDefault();
+                    let poseIdx = e.dataTransfer.getData("text/plain");
+                    if (poseIdx !== "" && poses[poseIdx]) {
+                        slot.innerHTML = '';
+                        const img = document.createElement('img');
+                        img.src = poses[poseIdx];
+                        slot.appendChild(img);
+                    }
+                };
+
                 container.appendChild(slot);
             }
-            
-            setTimeout(() => {
-                centerGrid();
-            }, 50);
+            setTimeout(() => centerGrid(), 50);
         }
 
-        // โหลดข้อมูลตัวละครทั้งหมดจาก Firebase มาใส่คลังฝั่งซ้าย
-        async function loadInventoryFromFirebase() {
-            const container = document.getElementById('inventory-grid');
-            try {
-                const querySnapshot = await getDocs(collection(db, "character_database"));
-                container.innerHTML = '';
-                
-                if (querySnapshot.empty) {
-                    container.innerHTML = `
-                        <div class="empty-hint">
-                            ยังไม่มีข้อมูล<br>ไปเพิ่มใน Lobby ก่อนครับ
-                        </div>
-                    `;
-                    return;
-                }
+        window.selectPose = function(index) {
+            document.querySelectorAll('.pose-slot').forEach((el, idx) => {
+                if(idx < 4) el.classList.remove('active');
+            });
+            if (!poses[index]) {
+                alert(`ท่าที่ ${index + 1} ยังว่างอยู่! กรุณากดปุ่ม "⚙️ ตั้งค่า" เพื่อเลือกตัวละครมาใส่`);
+                selectedPoseIndex = null;
+                return;
+            }
+            selectedPoseIndex = index;
+            document.getElementById(`pose-${index}`).classList.add('active');
+        }
 
-                querySnapshot.forEach((doc) => {
-                    let data = doc.data();
-                    let slot = document.createElement('div');
-                    slot.className = 'inv-slot';
-                    slot.innerHTML = `
-                        <img src="${data.imageBase64}" alt="${data.name}">
-                        <span>${data.name}</span>
-                    `;
-                    
-                    // เมื่อจิ้มเลือกตัวละครจากคลังซ้าย
-                    slot.onclick = () => {
-                        document.querySelectorAll('.inv-slot').forEach(s => s.classList.remove('selected'));
-                        slot.classList.add('selected');
-                        selectedCharacterImage = data.imageBase64;
-                    };
-                    
-                    container.appendChild(slot);
-                });
-            } catch (error) {
-                console.error("Error loading inventory: ", error);
-                container.innerHTML = '<div class="empty-hint" style="color:#d93025;">โหลดข้อมูลพลาด</div>';
+        window.dragPose = function(event, index) {
+            event.dataTransfer.setData("text/plain", index);
+        }
+
+        window.openSettingsModal = async function() {
+            let slotNum = prompt("เลือกช่องท่าทางที่ต้องการตั้งค่า (1 - 4):", "1");
+            let idx = parseInt(slotNum) - 1;
+            if (idx >= 0 && idx < 4) {
+                configuringSlotIndex = idx;
+                document.getElementById('modal-title.textContent = `⚙️ ตั้งค่าท่าที่ ${idx + 1}`;')
+                document.getElementById('minecraft-modal').style.display = 'flex';
+                await renderModalInventory();
+            } else if (slotNum !== null) {
+                alert("กรุณาระบุตัวเลขระหว่าง 1 ถึง 4 ครับ");
             }
         }
 
-        // ระบบเลื่อนและซูมตารางสแตน
+        window.closeSettingsModal = function() {
+            document.getElementById('minecraft-modal').style.display = 'none';
+        }
+
+        async function renderModalInventory(filterText = "") {
+            const grid = document.getElementById('modal-inventory-grid');
+            grid.innerHTML = 'กำลังโหลด...';
+            if (allCharacters.length === 0) {
+                await fetchAllCharacters();
+            }
+            grid.innerHTML = '';
+            
+            let filtered = allCharacters.filter(c => c.name.toLowerCase().includes(filterText.toLowerCase()));
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: span 3; text-align:center; padding:20px; color:#70757a;">ไม่พบข้อมูลตัวละคร<br><a href="index.html" style="color:#1a73e8;">ไปเพิ่มที่ Lobby</a></div>`;
+                return;
+            }
+
+            filtered.forEach(data => {
+                let item = document.createElement('div');
+                item.className = 'inv-item';
+                item.innerHTML = `
+                    <img src="${data.imageBase64}" alt="${data.name}">
+                    <span>${data.name}</span>
+                `;
+                item.onclick = () => {
+                    poses[configuringSlotIndex] = data.imageBase64;
+                    const slotUI = document.getElementById(`pose-${configuringSlotIndex}`);
+                    slotUI.innerHTML = `<img src="${data.imageBase64}" title="${data.name}">`;
+                    closeSettingsModal();
+                    selectPose(configuringSlotIndex);
+                };
+                grid.appendChild(item);
+            });
+        }
+
+        window.filterInventory = function() {
+            let query = document.getElementById('search-input').value;
+            renderModalInventory(query);
+        }
+
         function initPanAndZoom() {
             const workspace = document.getElementById('workspace');
-
             workspace.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                startX = e.clientX - panX;
-                startY = e.clientY - panY;
+                isDragging = true; startX = e.clientX - panX; startY = e.clientY - panY;
             });
             window.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
-                panX = e.clientX - startX;
-                panY = e.clientY - startY;
+                panX = e.clientX - startX; panY = e.clientY - startY;
                 updateTransform();
             });
             window.addEventListener('mouseup', () => { isDragging = false; });
@@ -394,39 +369,25 @@
             let initialDist = null;
             workspace.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1) {
-                    isDragging = true;
-                    startX = e.touches[0].clientX - panX;
-                    startY = e.touches[0].clientY - panY;
+                    isDragging = true; startX = e.touches[0].clientX - panX; startY = e.touches[0].clientY - panY;
                 } else if (e.touches.length === 2) {
                     isDragging = false;
-                    initialDist = Math.hypot(
-                        e.touches[0].clientX - e.touches[1].clientX,
-                        e.touches[0].clientY - e.touches[1].clientY
-                    );
+                    initialDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                 }
             });
-
             workspace.addEventListener('touchmove', (e) => {
                 if (isDragging && e.touches.length === 1) {
-                    panX = e.touches[0].clientX - startX;
-                    panY = e.touches[0].clientY - startY;
+                    panX = e.touches[0].clientX - startX; panY = e.touches[0].clientY - startY;
                     updateTransform();
                 } else if (e.touches.length === 2 && initialDist) {
-                    let currentDist = Math.hypot(
-                        e.touches[0].clientX - e.touches[1].clientX,
-                        e.touches[0].clientY - e.touches[1].clientY
-                    );
+                    let currentDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                     let zoomFactor = currentDist / initialDist;
                     scale = Math.min(Math.max(0.2, scale * zoomFactor), 5);
                     initialDist = currentDist;
                     updateTransform();
                 }
             }, { passive: true });
-
-            workspace.addEventListener('touchend', () => {
-                isDragging = false;
-                initialDist = null;
-            });
+            workspace.addEventListener('touchend', () => { isDragging = false; initialDist = null; });
         }
 
         window.adjustZoom = function(amount) {
@@ -435,19 +396,14 @@
         }
 
         window.resetTransform = function() {
-            scale = 1;
-            centerGrid();
+            scale = 1; centerGrid();
         }
 
         function centerGrid() {
             const workspace = document.getElementById('workspace');
             const container = document.getElementById('stand-grid-container');
-            
-            let availableWidth = workspace.clientWidth;
-            let availableHeight = workspace.clientHeight;
-
-            panX = (availableWidth - container.offsetWidth) / 2;
-            panY = (availableHeight - container.offsetHeight) / 2;
+            panX = (workspace.clientWidth - container.offsetWidth) / 2;
+            panY = (workspace.clientHeight - container.offsetHeight) / 2;
             updateTransform();
         }
 
