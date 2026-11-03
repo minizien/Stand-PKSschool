@@ -1,6 +1,8 @@
+// นำเข้า Firebase SDK จาก CDN แบบ ES Module
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// ค่า Config ของ Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCXYKW4bzj0pwAtt3yPHQGXFD1TameMHyw",
   authDomain: "pksstand.firebaseapp.com",
@@ -11,6 +13,7 @@ const firebaseConfig = {
   measurementId: "G-7ZJDCRH03K"
 };
 
+// เริ่มต้นใช้งาน Firebase และ Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -27,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'stand.html';
     });
 
-    // 2. ปุ่มกดบวกฐานข้อมูล: เปิด Modal อัปโหลดรูปและชื่อ
+    // 2. ปุ่มกดบวกฐานข้อมูล: เปิดหน้าต่างอัปโหลดรูปและชื่อเรียก
     btnDatabase.addEventListener('click', () => {
         uploadModal.style.display = 'flex';
     });
@@ -36,19 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadModal.style.display = 'none';
     });
 
-    // บันทึกข้อมูลรูปภาพและชื่อลง Firestore
+    // บันทึกข้อมูลรูปภาพและชื่อเรียกตัวละครลง Firestore
     btnSaveUpload.addEventListener('click', async () => {
         const nameInput = document.getElementById('char-name').value;
         const fileInput = document.getElementById('char-image').files[0];
 
         if (!nameInput || !fileInput) {
-            alert('กรุณากรอกชื่อและเลือกรูปภาพให้ครบถ้วน');
+            alert('กรุณากรอกชื่อเรียกและเลือกรูปภาพให้ครบถ้วน');
             return;
         }
 
         alert('กำลังอัปโหลดข้อมูลเข้าระบบ...');
 
-        // แปลงไฟล์รูปเป็น Base64 เพื่อเก็บบันทึกลง Firestore เบื้องต้น
         const reader = new FileReader();
         reader.readAsDataURL(fileInput);
         reader.onload = async () => {
@@ -69,11 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
 
-    // 3. ปุ่มแจ้งบัค
+    // 3. ปุ่มแจ้งบัค: ส่งข้อมูลแจ้งปัญหาไปเก็บใน Firestore
     btnBug.addEventListener('click', async () => {
         const bugDescription = prompt('กรุณากรอกรายละเอียดปัญหาหรือบัคที่พบ:');
         if (bugDescription) {
-            alert('ระบบกำลังส่งแจ้งเตือนไปยัง Firebase...');
+            alert('ระบบกำลังส่งแจ้งเตือนบัคไปยัง Firebase...');
             try {
                 await addDoc(collection(db, "bug_reports"), {
                     description: bugDescription,
@@ -83,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('ส่งแจ้งบัคสำเร็จ!');
             } catch (error) {
                 console.error('เกิดข้อผิดพลาด: ', error);
+                alert('เกิดข้อผิดพลาดในการส่งแจ้งบัค');
             }
         }
     });
