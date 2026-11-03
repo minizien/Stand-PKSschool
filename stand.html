@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>🎨 ระบบออกแบบสแตน</title>
+    <title>ระบบออกแบบสแตน</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -85,7 +85,7 @@
         .stand-slot:hover { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; }
         .stand-slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
 
-        /* หน้าต่าง Modal เลือกท่าทางสไตล์มายคราฟ */
+        /* หน้าต่าง Modal เลือกท่าทางสไตล์มายคราฟ (โหมดสว่าง) */
         #minecraft-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(3px);
@@ -93,7 +93,7 @@
         }
         .modal-box {
             background: #ffffff; border: 1px solid #dadce0; padding: 20px;
-            border-radius: 12px; width: 90%; max-width: 420px; max-height: 80vh;
+            border-radius: 12px; width: 90%; max-width: 450px; max-height: 80vh;
             display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -105,7 +105,7 @@
         .search-box:focus { border-color: #1a73e8; }
         .inventory-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            overflow-y: auto; max-height: 250px; padding: 4px; flex: 1;
+            overflow-y: auto; max-height: 300px; padding: 4px; flex: 1;
         }
         .inv-item {
             background: #f8f9fa; border: 2px solid #dadce0; border-radius: 8px;
@@ -113,8 +113,20 @@
             display: flex; flex-direction: column; align-items: center;
         }
         .inv-item:hover { border-color: #1a73e8; background: #e8f0fe; }
-        .inv-item img { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; margin-bottom: 4px; }
-        .inv-item span { font-size: 10px; color: #3c4043; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+        .inv-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; margin-bottom: 4px; }
+        .inv-item span { font-size: 11px; color: #3c4043; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+
+        /* หน้าต่างเลือกช่อง 1-4 แบบสวยงาม ไม่ใช้ Prompt */
+        #slot-selector-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(3px);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .slot-selector-box {
+            background: #ffffff; padding: 25px; border-radius: 12px;
+            width: 90%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .slot-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
 
         /* ปุ่มซูมลอยมุมขวาล่าง */
         .zoom-controls {
@@ -137,8 +149,8 @@
 <body>
 
     <div class="header-bar">
-        <h2>🎨 ออกแบบสแตน</h2>
-        <button class="btn primary" onclick="window.location.href='index.html'">🏠 Lobby</button>
+        <h2>🎨 PKSSand</h2>
+        <button class="btn primary" onclick="window.location.href='index.html'">Lobby</button>
     </div>
 
     <div class="main-layout">
@@ -150,7 +162,7 @@
             <div class="pose-slot" id="pose-2" onclick="selectPose(2)" draggable="true" ondragstart="dragPose(event, 2)" title="ท่า 3">3</div>
             <div class="pose-slot" id="pose-3" onclick="selectPose(3)" draggable="true" ondragstart="dragPose(event, 3)" title="ท่า 4">4</div>
             <div style="width: 100%; height: 1px; background: #dadce0; margin: 4px 0;"></div>
-            <div class="pose-slot settings-slot" onclick="openSettingsModal()" title="ตั้งค่าท่า">⚙️ ตั้งค่า</div>
+            <div class="pose-slot settings-slot" onclick="openSlotSelector()" title="ตั้งค่าท่า">⚙️</div>
         </div>
 
         <!-- พื้นที่เวิร์กสเปซตารางสแตน -->
@@ -161,18 +173,32 @@
         </div>
     </div>
 
-    <!-- หน้าต่าง Modal ตั้งค่า/เปลี่ยนท่า 1-4 สไตล์มายคราฟ พร้อมช่องเสิร์ชและลากวาง -->
+    <!-- Modal เลือกช่อง 1-4 (แทน Prompt) -->
+    <div id="slot-selector-modal">
+        <div class="slot-selector-box">
+            <h3 style="color: #1a73e8; margin-bottom: 10px;">เลือกช่องท่าทางที่ต้องการตั้งค่า</h3>
+            <div class="slot-options">
+                <button class="btn secondary" onclick="chooseSlot(0)">ท่าที่ 1</button>
+                <button class="btn secondary" onclick="chooseSlot(1)">ท่าที่ 2</button>
+                <button class="btn secondary" onclick="chooseSlot(2)">ท่าที่ 3</button>
+                <button class="btn secondary" onclick="chooseSlot(3)">ท่าที่ 4</button>
+            </div>
+            <button class="btn danger" onclick="closeSlotSelector()" style="width: 100%;">ยกเลิก</button>
+        </div>
+    </div>
+
+    <!-- หน้าต่าง Modal คลังตัวละครสไตล์มายคราฟ พร้อมช่องค้นหาและระบบลากวาง -->
     <div id="minecraft-modal">
         <div class="modal-box">
             <div class="modal-header">
-                <h3 id="modal-title">⚙️ ตั้งค่าท่าทาง</h3>
-                <button class="btn secondary" style="padding: 4px 8px; font-size: 12px;" onclick="closeSettingsModal()">❌</button>
+                <h3 id="modal-title">📦 เลือกตัวละครใส่ช่อง</h3>
+                <button class="btn secondary" style="padding: 4px 8px; font-size: 12px;" onclick="closeMinecraftModal()">❌</button>
             </div>
-            <input type="text" id="search-input" class="search-box" placeholder="🔍 ค้นหาตัวละคร..." oninput="filterInventory()">
+            <input type="text" id="search-input" class="search-box" placeholder="🔍 ค้นหาชื่อตัวละคร..." oninput="filterInventory()">
             <div class="inventory-grid" id="modal-inventory-grid">
                 กำลังโหลด...
             </div>
-            <button class="btn danger" onclick="closeSettingsModal()" style="width: 100%; margin-top: 10px;">ปิด</button>
+            <button class="btn danger" onclick="closeMinecraftModal()" style="width: 100%; margin-top: 10px;">ปิด</button>
         </div>
     </div>
 
@@ -257,15 +283,22 @@
                     }
                 };
 
-                // ลากวาง (Drag & Drop)
+                // ลากวาง (Drag & Drop) จากช่อง 1-4 หรือจากคลัง
                 slot.ondragover = (e) => e.preventDefault();
                 slot.ondrop = (e) => {
                     e.preventDefault();
                     let poseIdx = e.dataTransfer.getData("text/plain");
+                    let imgSrc = e.dataTransfer.getData("url");
+                    
                     if (poseIdx !== "" && poses[poseIdx]) {
                         slot.innerHTML = '';
                         const img = document.createElement('img');
                         img.src = poses[poseIdx];
+                        slot.appendChild(img);
+                    } else if (imgSrc) {
+                        slot.innerHTML = '';
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
                         slot.appendChild(img);
                     }
                 };
@@ -280,7 +313,7 @@
                 if(idx < 4) el.classList.remove('active');
             });
             if (!poses[index]) {
-                alert(`ท่าที่ ${index + 1} ยังว่างอยู่! กรุณากดปุ่ม "⚙️ ตั้งค่า" เพื่อเลือกตัวละครมาใส่`);
+                alert(`ท่าที่ ${index + 1} ยังว่างอยู่! กรุณากดปุ่ม "⚙️" เพื่อเลือกตัวละครมาใส่`);
                 selectedPoseIndex = null;
                 return;
             }
@@ -292,24 +325,26 @@
             event.dataTransfer.setData("text/plain", index);
         }
 
-        window.openSettingsModal = async function() {
-            let slotNum = prompt("เลือกช่องท่าทางที่ต้องการตั้งค่า (1 - 4):", "1");
-            let idx = parseInt(slotNum) - 1;
-            if (idx >= 0 && idx < 4) {
-                configuringSlotIndex = idx;
-                document.getElementById('modal-title').innerText = `⚙️ ตั้งค่าท่าที่ ${idx + 1}`;
-                document.getElementById('minecraft-modal').style.display = 'flex';
-                await renderModalInventory();
-            } else if (slotNum !== null) {
-                alert("กรุณาระบุตัวเลขระหว่าง 1 ถึง 4 ครับ");
-            }
+        // จัดการเปิด/ปิด Modal เลือกช่อง 1-4
+        window.openSlotSelector = function() {
+            document.getElementById('slot-selector-modal').style.display = 'flex';
+        }
+        window.closeSlotSelector = function() {
+            document.getElementById('slot-selector-modal').style.display = 'none';
+        }
+        window.chooseSlot = async function(idx) {
+            configuringSlotIndex = idx;
+            closeSlotSelector();
+            document.getElementById('modal-title').innerText = `📦 เลือกท่าที่ ${idx + 1}`;
+            document.getElementById('minecraft-modal').style.display = 'flex';
+            await renderMinecraftInventory();
         }
 
-        window.closeSettingsModal = function() {
+        window.closeMinecraftModal = function() {
             document.getElementById('minecraft-modal').style.display = 'none';
         }
 
-        async function renderModalInventory(filterText = "") {
+        async function renderMinecraftInventory(filterText = "") {
             const grid = document.getElementById('modal-inventory-grid');
             grid.innerHTML = 'กำลังโหลด...';
             if (allCharacters.length === 0) {
@@ -327,16 +362,22 @@
             filtered.forEach(data => {
                 let item = document.createElement('div');
                 item.className = 'inv-item';
+                item.draggable = true;
                 item.innerHTML = `
                     <img src="${data.imageBase64}" alt="${data.name}">
                     <span>${data.name}</span>
                 `;
+                // รองรับการคลิกเลือกใส่ช่อง 1-4
                 item.onclick = () => {
                     poses[configuringSlotIndex] = data.imageBase64;
                     const slotUI = document.getElementById(`pose-${configuringSlotIndex}`);
                     slotUI.innerHTML = `<img src="${data.imageBase64}" title="${data.name}">`;
-                    closeSettingsModal();
+                    closeMinecraftModal();
                     selectPose(configuringSlotIndex);
+                };
+                // รองรับการลากจากคลังมาวางในสแตนโดยตรง
+                item.ondragstart = (e) => {
+                    e.dataTransfer.setData("url", data.imageBase64);
                 };
                 grid.appendChild(item);
             });
@@ -344,7 +385,7 @@
 
         window.filterInventory = function() {
             let query = document.getElementById('search-input').value;
-            renderModalInventory(query);
+            renderMinecraftInventory(query);
         }
 
         function initPanAndZoom() {
