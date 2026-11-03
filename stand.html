@@ -85,7 +85,7 @@
         .stand-slot:hover { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; }
         .stand-slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
 
-        /* หน้าต่าง Modal เลือกท่าทางสไตล์มายคราฟ (โหมดสว่าง) */
+        /* หน้าต่าง Modal เลือกท่าทางสไตล์มายคราฟ */
         #minecraft-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(3px);
@@ -137,8 +137,8 @@
 <body>
 
     <div class="header-bar">
-        <h2>PKSstand</h2>
-        <button class="btn primary" onclick="window.location.href='index.html'"> 《 Lobby</button>
+        <h2>🎨 ออกแบบสแตน</h2>
+        <button class="btn primary" onclick="window.location.href='index.html'">🏠 Lobby</button>
     </div>
 
     <div class="main-layout">
@@ -150,7 +150,7 @@
             <div class="pose-slot" id="pose-2" onclick="selectPose(2)" draggable="true" ondragstart="dragPose(event, 2)" title="ท่า 3">3</div>
             <div class="pose-slot" id="pose-3" onclick="selectPose(3)" draggable="true" ondragstart="dragPose(event, 3)" title="ท่า 4">4</div>
             <div style="width: 100%; height: 1px; background: #dadce0; margin: 4px 0;"></div>
-            <div class="pose-slot settings-slot" onclick="openSettingsModal()" title="ตั้งค่าท่า">⚙️</div>
+            <div class="pose-slot settings-slot" onclick="openSettingsModal()" title="ตั้งค่าท่า">⚙️ ตั้งค่า</div>
         </div>
 
         <!-- พื้นที่เวิร์กสเปซตารางสแตน -->
@@ -170,7 +170,7 @@
             </div>
             <input type="text" id="search-input" class="search-box" placeholder="🔍 ค้นหาตัวละคร..." oninput="filterInventory()">
             <div class="inventory-grid" id="modal-inventory-grid">
-                กำลังโหลดข้อมูล...
+                กำลังโหลด...
             </div>
             <button class="btn danger" onclick="closeSettingsModal()" style="width: 100%; margin-top: 10px;">ปิด</button>
         </div>
@@ -244,7 +244,7 @@
                 slot.dataset.id = i;
                 slot.innerText = i;
                 
-                // รองรับการคลิกวางท่าที่เลือกอยู่
+                // คลิกวาง
                 slot.onclick = (e) => {
                     e.stopPropagation();
                     if (selectedPoseIndex !== null && poses[selectedPoseIndex]) {
@@ -257,7 +257,7 @@
                     }
                 };
 
-                // รองรับการลาก (Drag & Drop) มาวางบนสแตน
+                // ลากวาง (Drag & Drop)
                 slot.ondragover = (e) => e.preventDefault();
                 slot.ondrop = (e) => {
                     e.preventDefault();
@@ -297,7 +297,7 @@
             let idx = parseInt(slotNum) - 1;
             if (idx >= 0 && idx < 4) {
                 configuringSlotIndex = idx;
-                document.getElementById('modal-title.textContent = `⚙️ ตั้งค่าท่าที่ ${idx + 1}`;')
+                document.getElementById('modal-title').innerText = `⚙️ ตั้งค่าท่าที่ ${idx + 1}`;
                 document.getElementById('minecraft-modal').style.display = 'flex';
                 await renderModalInventory();
             } else if (slotNum !== null) {
