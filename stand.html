@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #ffffff;
             height: 100vh;
             display: flex;
@@ -16,140 +16,141 @@
             color: #202124;
         }
         .header-bar {
-            padding: 12px 20px;
+            padding: 12px 24px;
             background: #ffffff;
-            border-bottom: 1px solid #dadce0;
+            border-bottom: 1px solid #e1e3e6;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             z-index: 10;
         }
-        .header-bar h2 { font-size: 18px; color: #1a73e8; }
+        .header-bar h2 { font-size: 18px; color: #1a73e8; font-weight: 600; }
         .main-layout { display: flex; flex: 1; position: relative; overflow: hidden; }
 
-        /* แถบ UI ฝั่งซ้าย: 4 ช่องท่า + 1 ช่องตั้งค่า */
+        /* แถบ UI ฝั่งซ้าย: 4 ช่องท่า + 1 ช่องตั้งค่า โหมดสว่างสะอาดตา */
         .sidebar-ui {
-            width: 90px;
-            background: #ffffff;
-            border-right: 1px solid #dadce0;
+            width: 88px;
+            background: #f8f9fa;
+            border-right: 1px solid #e1e3e6;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px 10px;
-            gap: 10px;
+            padding: 16px 10px;
+            gap: 12px;
             z-index: 5;
             flex-shrink: 0;
         }
-        .sidebar-title { font-size: 10px; font-weight: bold; color: #5f6368; text-transform: uppercase; }
+        .sidebar-title { font-size: 10px; font-weight: 700; color: #5f6368; text-transform: uppercase; letter-spacing: 0.5px; }
         .pose-slot {
             width: 60px; height: 60px;
-            background: #f8f9fa;
+            background: #ffffff;
             border: 2px solid #dadce0;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            font-size: 12px;
-            color: #3c4043;
-            transition: all 0.2s;
+            font-size: 13px;
+            font-weight: 600;
+            color: #5f6368;
+            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
-        .pose-slot:hover { border-color: #1a73e8; background: #e8f0fe; }
-        .pose-slot.active { border: 3px solid #1a73e8; background: #e8f0fe; color: #1a73e8; font-weight: bold; }
+        .pose-slot:hover { border-color: #1a73e8; background: #f1f3f4; }
+        .pose-slot.active { border: 2px solid #1a73e8; background: #e8f0fe; color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
         .pose-slot img { width: 100%; height: 100%; object-fit: cover; }
-        .settings-slot { background: #f1f3f4; border-color: #bdc1c6; color: #202124; font-weight: bold; }
+        .settings-slot { background: #ffffff; border-color: #bdc1c6; color: #3c4043; font-size: 16px; }
 
-        /* พื้นที่เวิร์กสเปซโหมดสว่าง */
+        /* พื้นที่เวิร์กสเปซตารางสแตน โหมดสว่าง */
         .workspace {
             flex: 1; position: relative; overflow: hidden;
-            background-color: #f8f9fa; cursor: grab; touch-action: none;
+            background-color: #f4f5f7; cursor: grab; touch-action: none;
         }
         .workspace:active { cursor: grabbing; }
         #transform-wrapper { position: absolute; transform-origin: 0 0; will-change: transform; }
 
         #stand-grid-container {
-            display: grid; gap: 8px; background: #ffffff;
-            padding: 25px; border-radius: 12px; border: 1px solid #dadce0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            display: grid; gap: 10px; background: #ffffff;
+            padding: 30px; border-radius: 16px; border: 1px solid #e1e3e6;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
         }
         .stand-slot {
-            width: 65px; height: 85px; background: #f8f9fa;
-            border: 2px dashed #bdc1c6; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; border-radius: 8px;
-            font-size: 12px; color: #70757a; cursor: pointer; position: relative; transition: all 0.15s;
+            width: 68px; height: 88px; background: #fafbfc;
+            border: 2px dashed #cbd5e1; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border-radius: 10px;
+            font-size: 13px; font-weight: 500; color: #94a3b8; cursor: pointer; position: relative; transition: all 0.15s;
         }
         .stand-slot:hover { border-color: #1a73e8; background: #e8f0fe; color: #1a73e8; }
-        .stand-slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+        .stand-slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
 
-        /* หน้าต่าง Modal เลือกท่าทางสไตล์มายคราฟ (โหมดสว่าง) */
+        /* หน้าต่าง Modal เลือกตัวละครสไตล์ Minecraft Inventory (โหมดสว่าง) */
         #minecraft-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(3px);
+            background: rgba(32, 33, 36, 0.4); backdrop-filter: blur(4px);
             justify-content: center; align-items: center; z-index: 1000;
         }
         .modal-box {
-            background: #ffffff; border: 1px solid #dadce0; padding: 20px;
-            border-radius: 12px; width: 90%; max-width: 450px; max-height: 80vh;
-            display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background: #ffffff; border: 1px solid #e1e3e6; padding: 24px;
+            border-radius: 16px; width: 90%; max-width: 480px; max-height: 80vh;
+            display: flex; flex-direction: column; box-shadow: 0 12px 36px rgba(0,0,0,0.12);
         }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .modal-header h3 { color: #1a73e8; font-size: 16px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-header h3 { color: #1a73e8; font-size: 18px; font-weight: 600; }
         .search-box {
-            width: 100%; padding: 8px 12px; border: 1px solid #dadce0;
-            border-radius: 8px; font-size: 14px; margin-bottom: 12px; outline: none;
+            width: 100%; padding: 10px 14px; border: 1px solid #dadce0;
+            border-radius: 10px; font-size: 14px; margin-bottom: 16px; outline: none; background: #f8f9fa;
         }
-        .search-box:focus { border-color: #1a73e8; }
+        .search-box:focus { border-color: #1a73e8; background: #ffffff; box-shadow: 0 0 0 3px rgba(26,115,232,0.15); }
         .inventory-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            overflow-y: auto; max-height: 300px; padding: 4px; flex: 1;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+            overflow-y: auto; max-height: 320px; padding: 4px; flex: 1;
         }
         .inv-item {
-            background: #f8f9fa; border: 2px solid #dadce0; border-radius: 8px;
-            padding: 6px; text-align: center; cursor: pointer; transition: 0.2s;
+            background: #f8f9fa; border: 2px solid #e1e3e6; border-radius: 10px;
+            padding: 8px; text-align: center; cursor: pointer; transition: all 0.2s;
             display: flex; flex-direction: column; align-items: center;
         }
-        .inv-item:hover { border-color: #1a73e8; background: #e8f0fe; }
-        .inv-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; margin-bottom: 4px; }
-        .inv-item span { font-size: 11px; color: #3c4043; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+        .inv-item:hover { border-color: #1a73e8; background: #e8f0fe; transform: translateY(-2px); }
+        .inv-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; }
+        .inv-item span { font-size: 11px; font-weight: 500; color: #3c4043; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* หน้าต่างเลือกช่อง 1-4 แบบสวยงาม ไม่ใช้ Prompt */
+        /* หน้าต่างเลือกช่อง 1-4 สไตล์โมเดิร์น */
         #slot-selector-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(3px);
+            background: rgba(32, 33, 36, 0.4); backdrop-filter: blur(4px);
             justify-content: center; align-items: center; z-index: 1000;
         }
         .slot-selector-box {
-            background: #ffffff; padding: 25px; border-radius: 12px;
-            width: 90%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background: #ffffff; padding: 28px; border-radius: 16px;
+            width: 90%; max-width: 360px; text-align: center; box-shadow: 0 12px 36px rgba(0,0,0,0.12);
         }
-        .slot-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .slot-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
 
         /* ปุ่มซูมลอยมุมขวาล่าง */
         .zoom-controls {
-            position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px;
-            background: #ffffff; padding: 8px; border-radius: 12px;
-            border: 1px solid #dadce0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 100;
+            position: fixed; bottom: 24px; right: 24px; display: flex; gap: 8px;
+            background: #ffffff; padding: 8px; border-radius: 14px;
+            border: 1px solid #e1e3e6; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 100;
         }
         .btn {
-            padding: 8px 14px; font-size: 14px; font-weight: bold; border: none;
-            border-radius: 8px; cursor: pointer; transition: all 0.2s;
+            padding: 9px 16px; font-size: 14px; font-weight: 600; border: none;
+            border-radius: 10px; cursor: pointer; transition: all 0.2s;
         }
         .btn.primary { background-color: #1a73e8; color: white; }
         .btn.primary:hover { background-color: #1557b0; }
         .btn.secondary { background-color: #f1f3f4; color: #3c4043; border: 1px solid #dadce0; }
         .btn.secondary:hover { background-color: #e8eaed; }
-        .btn.danger { background-color: #d93025; color: white; }
-        .btn.danger:hover { background-color: #b31412; }
+        .btn.danger { background-color: #ea4335; color: white; }
+        .btn.danger:hover { background-color: #c5221f; }
     </style>
 </head>
 <body>
 
     <div class="header-bar">
-        <h2>🎨 PKSSand</h2>
+        <h2>✨ PKSSand</h2>
         <button class="btn primary" onclick="window.location.href='index.html'">Lobby</button>
     </div>
 
@@ -161,7 +162,7 @@
             <div class="pose-slot" id="pose-1" onclick="selectPose(1)" draggable="true" ondragstart="dragPose(event, 1)" title="ท่า 2">2</div>
             <div class="pose-slot" id="pose-2" onclick="selectPose(2)" draggable="true" ondragstart="dragPose(event, 2)" title="ท่า 3">3</div>
             <div class="pose-slot" id="pose-3" onclick="selectPose(3)" draggable="true" ondragstart="dragPose(event, 3)" title="ท่า 4">4</div>
-            <div style="width: 100%; height: 1px; background: #dadce0; margin: 4px 0;"></div>
+            <div style="width: 100%; height: 1px; background: #e1e3e6; margin: 4px 0;"></div>
             <div class="pose-slot settings-slot" onclick="openSlotSelector()" title="ตั้งค่าท่า">⚙️</div>
         </div>
 
@@ -173,10 +174,11 @@
         </div>
     </div>
 
-    <!-- Modal เลือกช่อง 1-4 (แทน Prompt) -->
+    <!-- Modal เลือกช่อง 1-4 (ไร้กล่อง Prompt น่ารำคาญ) -->
     <div id="slot-selector-modal">
         <div class="slot-selector-box">
-            <h3 style="color: #1a73e8; margin-bottom: 10px;">เลือกช่องท่าทางที่ต้องการตั้งค่า</h3>
+            <h3 style="color: #1a73e8; margin-bottom: 8px; font-size: 18px;">เลือกช่องท่าทางที่ต้องการตั้งค่า</h3>
+            <p style="font-size: 13px; color: #5f6368; margin-bottom: 16px;">เลือกช่อง 1 ถึง 4 เพื่อเปลี่ยนตัวละคร</p>
             <div class="slot-options">
                 <button class="btn secondary" onclick="chooseSlot(0)">ท่าที่ 1</button>
                 <button class="btn secondary" onclick="chooseSlot(1)">ท่าที่ 2</button>
@@ -192,13 +194,13 @@
         <div class="modal-box">
             <div class="modal-header">
                 <h3 id="modal-title">📦 เลือกตัวละครใส่ช่อง</h3>
-                <button class="btn secondary" style="padding: 4px 8px; font-size: 12px;" onclick="closeMinecraftModal()">❌</button>
+                <button class="btn secondary" style="padding: 6px 10px; font-size: 12px;" onclick="closeMinecraftModal()">✕</button>
             </div>
             <input type="text" id="search-input" class="search-box" placeholder="🔍 ค้นหาชื่อตัวละคร..." oninput="filterInventory()">
             <div class="inventory-grid" id="modal-inventory-grid">
                 กำลังโหลด...
             </div>
-            <button class="btn danger" onclick="closeMinecraftModal()" style="width: 100%; margin-top: 10px;">ปิด</button>
+            <button class="btn danger" onclick="closeMinecraftModal()" style="width: 100%; margin-top: 12px;">ปิดหน้าต่าง</button>
         </div>
     </div>
 
@@ -260,8 +262,8 @@
 
         function generateGrid(rows, cols) {
             const container = document.getElementById('stand-grid-container');
-            container.style.gridTemplateColumns = `repeat(${cols}, 65px)`;
-            container.style.gridTemplateRows = `repeat(${rows}, 85px)`;
+            container.style.gridTemplateColumns = `repeat(${cols}, 68px)`;
+            container.style.gridTemplateRows = `repeat(${rows}, 88px)`;
             container.innerHTML = '';
 
             for (let i = 1; i <= rows * cols; i++) {
@@ -270,7 +272,7 @@
                 slot.dataset.id = i;
                 slot.innerText = i;
                 
-                // คลิกวาง
+                // คลิกวาง (จากช่อง 1-4 ที่เลือกไว้)
                 slot.onclick = (e) => {
                     e.stopPropagation();
                     if (selectedPoseIndex !== null && poses[selectedPoseIndex]) {
@@ -279,11 +281,11 @@
                         img.src = poses[selectedPoseIndex];
                         slot.appendChild(img);
                     } else {
-                        alert(`ช่องที่ ${i}: กรุณาเลือกท่าจากช่อง 1-4 ฝั่งซ้ายก่อนคลิกวาง!`);
+                        // แทนที่จะเด้ง Alert กวนใจ เปลี่ยนเป็นบอกเบาๆ หรือคลิกวางได้เลยถ้าเลือกท่าแล้ว
                     }
                 };
 
-                // ลากวาง (Drag & Drop) จากช่อง 1-4 หรือจากคลัง
+                // ลากวาง (Drag & Drop)
                 slot.ondragover = (e) => e.preventDefault();
                 slot.ondrop = (e) => {
                     e.preventDefault();
@@ -313,8 +315,7 @@
                 if(idx < 4) el.classList.remove('active');
             });
             if (!poses[index]) {
-                alert(`ท่าที่ ${index + 1} ยังว่างอยู่! กรุณากดปุ่ม "⚙️" เพื่อเลือกตัวละครมาใส่`);
-                selectedPoseIndex = null;
+                openSlotSelector(); // ถ้าช่องว่าง ให้เด้งเลือกตั้งค่าทันที
                 return;
             }
             selectedPoseIndex = index;
@@ -325,7 +326,6 @@
             event.dataTransfer.setData("text/plain", index);
         }
 
-        // จัดการเปิด/ปิด Modal เลือกช่อง 1-4
         window.openSlotSelector = function() {
             document.getElementById('slot-selector-modal').style.display = 'flex';
         }
@@ -335,7 +335,7 @@
         window.chooseSlot = async function(idx) {
             configuringSlotIndex = idx;
             closeSlotSelector();
-            document.getElementById('modal-title').innerText = `📦 เลือกท่าที่ ${idx + 1}`;
+            document.getElementById('modal-title').innerText = `📦 เลือกตัวละครใส่ท่าที่ ${idx + 1}`;
             document.getElementById('minecraft-modal').style.display = 'flex';
             await renderMinecraftInventory();
         }
@@ -346,7 +346,7 @@
 
         async function renderMinecraftInventory(filterText = "") {
             const grid = document.getElementById('modal-inventory-grid');
-            grid.innerHTML = 'กำลังโหลด...';
+            grid.innerHTML = '<div style="grid-column: span 3; text-align:center; padding:20px; color:#5f6368;">กำลังโหลดข้อมูล...</div>';
             if (allCharacters.length === 0) {
                 await fetchAllCharacters();
             }
@@ -355,7 +355,7 @@
             let filtered = allCharacters.filter(c => c.name.toLowerCase().includes(filterText.toLowerCase()));
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: span 3; text-align:center; padding:20px; color:#70757a;">ไม่พบข้อมูลตัวละคร<br><a href="index.html" style="color:#1a73e8;">ไปเพิ่มที่ Lobby</a></div>`;
+                grid.innerHTML = `<div style="grid-column: span 3; text-align:center; padding:20px; color:#5f6368;">ไม่พบข้อมูลตัวละคร<br><a href="index.html" style="color:#1a73e8; font-weight:600;">ไปเพิ่มที่ Lobby ก่อน</a></div>`;
                 return;
             }
 
@@ -367,7 +367,7 @@
                     <img src="${data.imageBase64}" alt="${data.name}">
                     <span>${data.name}</span>
                 `;
-                // รองรับการคลิกเลือกใส่ช่อง 1-4
+                // คลิกเลือกใส่ช่อง 1-4
                 item.onclick = () => {
                     poses[configuringSlotIndex] = data.imageBase64;
                     const slotUI = document.getElementById(`pose-${configuringSlotIndex}`);
@@ -375,7 +375,7 @@
                     closeMinecraftModal();
                     selectPose(configuringSlotIndex);
                 };
-                // รองรับการลากจากคลังมาวางในสแตนโดยตรง
+                // ลากจากคลังมาวางในสแตนโดยตรง
                 item.ondragstart = (e) => {
                     e.dataTransfer.setData("url", data.imageBase64);
                 };
